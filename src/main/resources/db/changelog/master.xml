@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <!--<changeSet id="T100-2021128-001" author="jsq" >-->
+    <!--<createTable tableName="sys_permission" remarks="权限表">-->
+      <!--<column name="id" type="varchar(35)" remarks="权限id">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.sys_permission.id"/>-->
+      <!--</column>-->
+      <!--<column name="permission_code" type="varchar(20)" remarks="权限代码">-->
+        <!--<constraints nullable="false" unique="true" uniqueConstraintName="unique.sys_permission.permission_code"/>-->
+      <!--</column>-->
+      <!--<column name="permission_name" type="varchar(20)" remarks="权限名称">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<createTable tableName="sys_role" remarks="角色表">-->
+      <!--<column name="id" type="varchar(35)" remarks="角色ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.sys_role_id"/>-->
+      <!--</column>-->
+      <!--<column name="role_code" type="varchar(20)" remarks="角色代码">-->
+        <!--<constraints nullable="false" unique="true" uniqueConstraintName="unique.sys_role.role_code"/>-->
+      <!--</column>-->
+      <!--<column name="role_name" type="varchar(20)" remarks="角色名称">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+
+    <!--<createTable tableName="sys_role_permission" remarks="角色权限表">-->
+      <!--<column name="id" type="varchar(35)" remarks="角色权限表id">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.role_permission"/>-->
+      <!--</column>-->
+      <!--<column name="role_id" type="varchar(35)" remarks="角色id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="permission_id" type="varchar(35)" remarks="权限id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<addUniqueConstraint tableName="sys_role_permission" columnNames="role_id,permission_id" constraintName="unique.sys_role_permission.role_id_permission_id"/>-->
+
+    <!--<createTable tableName="sys_user_info" remarks="用户信息表">-->
+      <!--<column name="id" type="varchar(35)" remarks="用户id">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.user_info_id"/>-->
+      <!--</column>-->
+      <!--<column name="phone" type="varchar(20)" remarks="联系方式"/>-->
+
+      <!--<column name="role_id" type="varchar(35)" remarks="角色id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<createTable tableName="sys_user" remarks="用户表">-->
+      <!--<column name="id" type="varchar(35)" remarks="用户id">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk_sys_user_id"/>-->
+      <!--</column>-->
+      <!--<column name="user_name" type="varchar(20)" remarks="用户名称">-->
+        <!--<constraints nullable="false" unique="true" uniqueConstraintName="unique_sys_user_username"/>-->
+      <!--</column>-->
+      <!--<column name="pwd" type="varchar(20)" remarks="密码">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="user_info_id" type="varchar(35)" remarks="用户信息表id">-->
+        <!--<constraints unique="true" uniqueConstraintName="unique_sys_user_user_id" nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<createIndex tableName="sys_user" indexName="index.sys_user.user_name">-->
+      <!--<column name="user_name"/>-->
+    <!--</createIndex>-->
+
+    <!--<createTable tableName="sys_menu" remarks="菜单表">-->
+      <!--<column name="id" type="varchar(35)" remarks="菜单ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.menu_id"/>-->
+      <!--</column>-->
+      <!--<column name="menu_name" type="varchar(20)" remarks="菜单名称">-->
+        <!--<constraints nullable="false" unique="true" foreignKeyName="unique.menu_name" />-->
+      <!--</column>-->
+      <!--<column name="parent_id" type="varchar(35)" remarks="父菜单id">-->
+      <!--</column>-->
+      <!--<column name="path" type="varchar(100)" remarks="菜单path">-->
+        <!--<constraints nullable="false" unique="true" foreignKeyName="unique.path" />-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<addUniqueConstraint tableName="sys_menu" columnNames="id,parent_id" constraintName="unique.sys_menu.id_parentId"/>-->
+
+    <!--<createTable tableName="sys_menu_role" remarks="菜单角色权限表">-->
+      <!--<column name="id" type="varchar(35)" remarks="菜单角色权限表id">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.menu_role"/>-->
+      <!--</column>-->
+      <!--<column name="role_id" type="varchar(30)" remarks="角色id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="menu_id" type="varchar(35)" remarks="菜单id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+    <!--<addUniqueConstraint tableName="sys_menu_role" columnNames="role_id,menu_id" constraintName="unique.sys_menu_role.role_id_menu_id"/>-->
+
+    <!--<createTable tableName="info_column_type" remarks="栏目类型表">-->
+      <!--<column name="id" type="varchar(35)" remarks="ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.column_type.id"/>-->
+      <!--</column>-->
+      <!--<column name="column_type_name" type="varchar(35)" remarks="栏目类型名称"/>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean" defaultValue="0"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<createTable tableName="info_column" remarks="栏目表">-->
+      <!--<column name="id" type="varchar(35)" remarks="ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.column.id"/>-->
+      <!--</column>-->
+      <!--<column name="column_name" type="varchar(35)" remarks="栏目名称"/>-->
+      <!--<column name="column_type_id" type="varchar(35)" remarks="栏目类型id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="path" type="varchar(255)" remarks="栏目路径"/>-->
+      <!--<column name="sort" type="int" remarks="顺序"/>-->
+      <!--<column name="remarks" type="varchar(500)" remarks="描述"/>-->
+      <!--<column name="thumb" type="varchar(2000)" remarks="缩略图"/>-->
+      <!--<column name="parent_id" type="varchar(20)" remarks="父栏目id"/>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean" defaultValue="0"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+    <!--</createTable>-->
+    <!--<addUniqueConstraint tableName="info_column" columnNames="id,parent_id" constraintName="unique.info_column.id_parentId"/>-->
+
+
+    <!--<createTable tableName="info_ecms" remarks="新闻表">-->
+      <!--<column name="id" type="varchar(35)" remarks="ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.info_ecms.id"/>-->
+      <!--</column>-->
+      <!--<column name="column_id" type="varchar(35)" remarks="栏目id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="content" type="clob" remarks="内容"/>-->
+      <!--<column name="title" type="varchar(255)" remarks="标题"/>-->
+      <!--<column name="sub_title" type="varchar(255)" remarks="副标题"/>-->
+      <!--<column name="attachment" type="varchar(255)" remarks="附件"/>-->
+      <!--<column name="link_url" type="varchar(255)" remarks="文章跳转链接地址"/>-->
+      <!--<column name="keyword" type="varchar(255)" remarks="关键字"/>-->
+      <!--<column name="remarks" type="varchar(400)" remarks="描述"/>-->
+      <!--<column name="img" type="varchar(1000)" remarks="文章图片"/>-->
+      <!--<column name="source" type="varchar(255)" remarks="文章来源"/>-->
+      <!--<column name="author" type="varchar(255)" remarks="文章作者"/>-->
+      <!--<column name="type" type="varchar(255)" remarks="类型"/>-->
+      <!--<column name="column_status" type="TINYINT" remarks="状态"/>-->
+      <!--<column name="sort" type="int" remarks="自定义顺序"/>-->
+      <!--<column name="hit_times" type="int" defaultValue="0" remarks="点击次数"/>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="focus_img" type="boolean" remarks="焦点图片">-->
+      <!--</column>-->
+    <!--</createTable>-->
+
+    <!--<addUniqueConstraint tableName="info_ecms" columnNames="id,column_id" constraintName="unique.info_ecms.id_column_id"/>-->
+
+    <!--<createTable tableName="info_collection_rule" remarks="采集规则表">-->
+      <!--<column name="id" type="varchar(35)" remarks="ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk.info_collection_rule.id"/>-->
+      <!--</column>-->
+      <!--<column name="column_id" type="varchar(35)" remarks="栏目id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="rule_name" type="varchar(55)" remarks="规则名称">-->
+        <!--<constraints nullable="false" unique="true" uniqueConstraintName="unique.info_collection_rule.name"/>-->
+      <!--</column>-->
+      <!--<column name="collection_path" type="varchar(2000)" remarks="采集地址"/>-->
+      <!--<column name="is_content" type="boolean"  remarks="采集页为直接内容"/>-->
+      <!--<column name="content_address_prefix" type="varchar(100)"  remarks="内容页面地址前缀"/>-->
+      <!--<column name="img_address_prefix" type="varchar(100)"  remarks="图片/FLASH地址前缀"/>-->
+      <!--<column name="sub_title" type="varchar(255)" remarks="副标题"/>-->
+      <!--<column name="start_date" type="datetime" remarks="开始时间"/>-->
+      <!--<column name="end_date" type="datetime" remarks="结束时间"/>-->
+      <!--<column name="remarks" type="varchar(1000)" remarks="备注"/>-->
+
+      <!--<column name="info_page_rule" type="varchar(1000)" remarks="信息页链接规则"/>-->
+      <!--<column name="title_picture_rule" type="varchar(1000)" remarks="标题图片规则"/>-->
+      <!--<column name="title_address_prefix" type="varchar(255)" remarks="图片地址前缀"/>-->
+      <!--<column name="is_save_local" type="boolean" remarks="保存本地"/>-->
+
+      <!--<column name="content_rule" type="varchar(255)"  remarks="正文规则">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="rule_type" type="tinyint"  remarks="采集规则类型">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+      <!--<column name="title_rule" type="varchar(1000)" remarks="标题规则"/>-->
+      <!--<column name="sub_title_rule" type="varchar(1000)" remarks="副标题规则"/>-->
+      <!--<column name="publish_time" type="varchar(1000)" remarks="发布时间规则"/>-->
+      <!--<column name="content_validity_rule" type="varchar(1000)" remarks="内容简介规则"/>-->
+      <!--<column name="author_rule" type="varchar(1000)" remarks="作者正则规则"/>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="is_deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+      <!--<column name="rule_status" type="varchar(255)"  remarks="状态"/>-->
+    <!--</createTable>-->
+
+    <!--<createTable tableName="info_ecms_rule" remarks="采集信息统计表">-->
+      <!--<column name="id" type="varchar(35)" remarks="ID">-->
+        <!--<constraints nullable="false" primaryKey="true" primaryKeyName="pk_info_ecms_rule_id"/>-->
+      <!--</column>-->
+      <!--<column name="rule_id" type="varchar(35)" remarks="规则id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="column_id" type="varchar(35)" remarks="栏目id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="ecmas_id" type="varchar(35)" remarks="文章id">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="img_num" type="int" remarks="采集统计">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="ecms_status" type="varchar(255)" remarks="状态">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+      <!--<column name="created_time" type="datetime" defaultValue="now()" remarks="创建时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_time" type="datetime" defaultValue="now()" remarks="更新时间">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="created_by" type="varchar(20)" remarks="创建人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="updated_by" type="varchar(20)" remarks="更新人">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+      <!--<column name="deleted" type="boolean"  remarks="逻辑删除">-->
+        <!--<constraints nullable="false"/>-->
+      <!--</column>-->
+
+    <!--</createTable>-->
+
+
+  <!--</changeSet>-->
+  <!--<changeSet id="T100-20211018-002" author="jsq">-->
+    <!--<sqlFile path="classpath:/db/sql/init.sql" encoding="UTF-8" />-->
+  <!--</changeSet>-->
+
+</databaseChangeLog>

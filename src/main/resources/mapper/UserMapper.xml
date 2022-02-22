@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eicas.ecms.mapper.UserMapper">
+    <select id="page" resultMap="resultMap_user">
+        SELECT sys_user.*, sys_user_info.role_id, sys_user_info.phone, sys_role.role_name as roleName
+        FROM sys_user,sys_user_info,sys_role
+        <where>
+            sys_user.user_info_id = sys_user_info.id
+            and sys_user_info.role_id = sys_role.id
+            and sys_user.is_deleted=#{entity.deleted}
+            <if test="entity.userName != null and entity.userName != ''">
+                and LOCATE(#{entity.userName}, `user_name`)>0
+            </if>
+        </where>
+    </select>
+    <resultMap id="resultMap_user" type="com.eicas.ecms.dto.UserDto">
+        <id column="id" property="id"/>
+        <!--        <collection property="columnName" column="column_id" select="ColumnSettingMapper.getNameById"/>-->
+        <!--        &lt;!&ndash;id作为参数递归调用getDeptTree，查询子节点&ndash;&gt;-->
+    </resultMap>
+</mapper>

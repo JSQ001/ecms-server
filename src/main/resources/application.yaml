@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: admin-server
+  profiles:
+#    active: dev
+    active: pro
+#    active: test

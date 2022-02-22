@@ -1,0 +1,37 @@
+-- -- -- 初始化菜单
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','0')),'信息管理',null,'/information-management',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','1')),'信息发布',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '信息管理') t1),'/information-management/publish',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','3')),'信息审核',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '信息管理') t1),'/information-management/article',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','4')),'内容采集',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '信息管理') t1),'/information-management/content-collection',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','2')),'栏目管理',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '信息管理') t1),'/information-management/column-setting',0,now(),now(),'init','init');
+-- --
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','5')),'系统设置',null,'/system-setting',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','6')),'用户管理',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '系统管理') t1),'/system-setting/user',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','7')),'角色管理',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '系统管理') t1),'/system-setting/role',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','8')),'权限管理',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '系统管理') t1),'/system-setting/permission',0,now(),now(),'init','init');
+-- INSERT INTO sys_menu VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','9')),'菜单管理',(SELECT id from (SELECT id from sys_menu WHERE menu_name = '系统管理') t1),'/system-setting/menu',0,now(),now(),'init','init');
+-- -- --
+-- -- --
+-- -- -- 初始化栏目类型
+-- INSERT into info_column_type VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'内部栏目',NOW(),NOW(),'init','init',0);
+-- INSERT into info_column_type VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'外部栏目',NOW(),NOW(),'init','init',0);
+-- -- --
+-- -- -- 初始化栏目
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'军兵种',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/eastern-theater',1,null,null,null,NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'东部战区',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/eastern-theater',2,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'南部战区',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/southern-theater',3,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'西部战区',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/western-theater',4,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'北部战区',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/northern-theater',5,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'中部战区',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/central-theater',6,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'陆军',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/land-force',7,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'海军',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/navy',8,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'空军',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/air-force',9,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'火箭军',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/rocket-army',10,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'战略支援部队',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/strategic-support-force',11,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'联勤保障部队',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/joint-support-force',12,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'军事科学院',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/military-academy-sciences',13,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'国防大学',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/national-defense-university',14,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'国防科技大学',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/national-Defense-technology-university',15,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- INSERT into info_column VALUES ((REPLACE(unix_timestamp(NOW(3)),'.','')),'武装警察部队',(SELECT id from info_column_type WHERE column_type_name = '内部栏目'),'/armed-police-force',16,null,null,(SELECT id from (SELECT id from info_column WHERE column_name = '军兵种') t1),NOW(),NOW(),'init','init',0);
+-- -- --
+-- -- --
