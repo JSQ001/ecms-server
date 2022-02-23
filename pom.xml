@@ -18,26 +18,12 @@
     </properties>
 
     <repositories>
-      <repository>
-        <id>central</id>
-        <name>aliyun maven</name>
-        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        <layout>default</layout>
-        <!-- 是否开启发布版构件下载 -->
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <!-- 是否开启快照版构件下载 -->
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-      </repository>
-      <repository> 
-        <id>central-repos1</id> 
-        <name>Central Repository 2</name> 
-        <url>http://repo1.maven.org/maven2/</url> 
-      </repository> 
-    </repositories> 
+        <repository>
+            <id>lsit-prod-maven</id>
+            <name>maven</name>
+            <url>https://lsit-maven.pkg.coding.net/repository/prod/maven/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
