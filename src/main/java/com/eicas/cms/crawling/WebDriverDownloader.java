@@ -75,7 +75,6 @@ public class WebDriverDownloader implements Downloader, Closeable {
         /*
          * TODO You can add mouse event or other processes
          *
-         * @author: bob.li.0718@gmail.com
          */
 
         WebElement webElement = webDriver.findElement(By.xpath("/html"));

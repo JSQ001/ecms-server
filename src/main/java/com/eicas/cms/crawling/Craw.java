@@ -16,18 +16,17 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class Craw {
-    @Resource
-    private MyPageProcessor pageProcessor;
 
     @Resource
-    private MyPipeline myPipeline;
+    private XPathPageProcessor pageProcessor;
+
+    @Resource
+    private StorePipeline myPipeline;
 
     //phantomjs在系统存放的路径
     @Value("${filePath.phantomjs}")
     private String phantomjsPath;
 
-    @Resource
-    private MyPageProcessor myPageProcessor;
 
     /**
      * 开启爬虫方法
@@ -36,10 +35,11 @@ public class Craw {
     public void run(CollectRule collectRule,String sessionId){
         try {
             //设置采集规则
-            myPageProcessor.setCollectRule(collectRule);
+            pageProcessor.setCollectRule(collectRule);
 
             if(StringUtils.hasText(sessionId)){
                 myPipeline.setSessionId(sessionId);
+                pageProcessor.setSessionId(sessionId);
             }
 
             //Spider.create(myPageProcessor)
@@ -52,6 +52,7 @@ public class Craw {
                     .thread(5)
                     //启动爬虫
                     .start();
+            MyWebsocketServer.pageQueue.put(sessionId,0);
         }catch (Exception e){
             log.error(e.getMessage());
             if(StringUtils.hasText(sessionId)){

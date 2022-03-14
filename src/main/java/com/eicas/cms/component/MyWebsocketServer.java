@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.eicas.cms.pojo.vo.WebSocketResponseToClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +24,9 @@ public class MyWebsocketServer {
     /**
      * 存放所有在线的客户端
      */
-    public static Map<String, Session> clients = new ConcurrentHashMap<>();
+    public static Map<String, Session> clients = new HashMap<>();
+
+    public static Map<String, Integer> pageQueue = new HashMap<>();
 
     private MessageHandler messageHandler;
 
@@ -29,7 +34,7 @@ public class MyWebsocketServer {
     public void onOpen(Session session) {
         log.info("有新的客户端连接了: {}", session.getId());
         //将新用户存入在线的组
-        clients.put(session.getId(), session);
+        MyWebsocketServer.clients.put(session.getId(), session);
     }
 
     /**
@@ -40,7 +45,7 @@ public class MyWebsocketServer {
     public void onClose(Session session) {
         log.info("有用户断开了, id为:{}", session.getId());
         //将掉线的用户移除在线的组里
-        clients.remove(session.getId());
+        MyWebsocketServer.clients.remove(session.getId());
     }
 
     /**
@@ -69,12 +74,12 @@ public class MyWebsocketServer {
      * @param message 消息内容
      */
     private void sendAll(WebSocketResponseToClient message) {
-        for (Map.Entry<String, Session> item : clients.entrySet()) {
+        for (Map.Entry<String, Session> item : MyWebsocketServer.clients.entrySet()) {
             sendMessage(item.getValue().getId(), message);
         }
     }
     public static void sendMessage(String sessionId, WebSocketResponseToClient message){
-        Session session = clients.get(sessionId);
+        Session session = MyWebsocketServer.clients.get(sessionId);
         session.getAsyncRemote().sendText(JSONArray.toJSON(message).toString());
     }
 }

@@ -43,7 +43,6 @@ public class MessageHandler {
                         craw.run(collectRule,sessionId);
                     }
             }
-
         }catch(Exception e){
             log.error("消息格式错误！"+e.getMessage());
         }

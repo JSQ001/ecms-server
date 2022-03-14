@@ -22,4 +22,6 @@ public class ArticleStatisticalResults {
 
     private String notApproved;
 
+    private String name;
+
 }

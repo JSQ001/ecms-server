@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 /**
  * 获取spring容器
  * 当一个类实现了这个接口ApplicationContextAware之后，
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
 public class SpringCtxUtils implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
+
+
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

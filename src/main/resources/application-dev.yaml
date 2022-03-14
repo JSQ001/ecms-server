@@ -1,6 +1,6 @@
 #本地测试环境
 server:
-  port: 8989
+  port: 18989
 spring:
   datasource:
     url: jdbc:p6spy:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
@@ -33,7 +33,7 @@ mybatis-plus:
 
 filePath:
   image: /Users/jsq/work/code/中科/科大/ecms/img/
-  imageMappingPath: /images
+  imageMappingPath: /images/
   phantomjs: /usr/local/bin/phantomjs
 
 swagger3:

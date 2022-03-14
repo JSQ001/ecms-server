@@ -18,10 +18,10 @@ public class BaseVO<T> {
         Integer current = this.getCurrent();
         Integer size = this.getSize();
         if(current == null){
-            current = 0;
+            current = 1;
         }
         if(size == null){
-            size = 0;
+            size = 10;
         }
         return new Page<T>(current,size);
     }

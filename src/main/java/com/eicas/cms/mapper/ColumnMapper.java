@@ -24,7 +24,8 @@ public interface ColumnMapper extends BaseMapper<Column> {
      */
     @Select(
         "<script>" +
-            "select id,code,name,type,path,publish_time,sort_order,description from cms_column " +
+            "select id, code, parent_id, name, type, path, publish_time, sort_order, keyword, " +
+            "custom_url, description from cms_column " +
             "where id in (" +
                 "select distinct getRootId(id) from cms_column" +
                     "<where> " +
@@ -54,7 +55,8 @@ public interface ColumnMapper extends BaseMapper<Column> {
     * */
     @Select(
         "<script>" +
-            "select id,code,name, parent_id as parentId from cms_column" +
+            "select id, code, parent_id, name, type, path, publish_time, sort_order, keyword, " +
+            "custom_url, description from cms_column" +
             "<where>" +
                 "<choose>" +
                     "<when test='id != \"\" and id != null '>" +

@@ -67,18 +67,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .eq(entity.getAuthor() != null, "author",entity.getAuthor());
 
         List<Article> article = this.list(queryWrapper);
+        boolean flag = false;
         if(article.size() > 0){
             log.info("文章已存在");
-            if(StringUtils.hasText(sessionId)){
-                MyWebsocketServer.sendMessage(sessionId, new WebSocketResponseToClient(201, "文章已存在"));
-            }
-            return false;
         }else {
-            if(StringUtils.hasText(sessionId)){
-                MyWebsocketServer.sendMessage(sessionId, new WebSocketResponseToClient(200, "爬取成功"));
-            }
-            return customSave(entity);
+            flag =  customSave(entity);
         }
+        int count = MyWebsocketServer.pageQueue.get(sessionId);
+        MyWebsocketServer.pageQueue.put(sessionId, count -1 );
+
+        if(StringUtils.hasText(sessionId) && MyWebsocketServer.pageQueue.get(sessionId) == 0){
+            MyWebsocketServer.sendMessage(sessionId, new WebSocketResponseToClient(200, "爬取成功！"));
+        }
+        return flag;
     }
 
     @Override
