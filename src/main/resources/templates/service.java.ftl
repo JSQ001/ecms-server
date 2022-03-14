@@ -4,7 +4,6 @@ import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import java.util.List;
 
 /**
  * <p>
@@ -14,52 +13,26 @@ import java.util.List;
  * @author ${author}
  * @since ${date}
  */
-<#if kotlin>
-interface ${table.serviceName} : ${superServiceClass}<${entity}>
-<#else>
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
 
     /**
-     * ${table.comment!}分页列表
-     * @param param 根据需要进行传值
-     * @return
-     */
-    public Page<${entity}> page(${entity} entity, Page<${entity}> page);
-
-
-    /**
-     * ${table.comment!}详情
-     * @param id
-     * @return
-     */
-    ${entity} info(Long id);
+    * 根据传入entity属性值分页查询
+    * @param param
+    * @param page
+    * @return Page<${entity}>
+    */
+    Page<${entity}> page(${entity} entity, Page<${entity}> page);
 
     /**
-    * ${table.comment!}新增
-    * @param param 根据需要进行传值
+    * 保存或更新
+    * @param entity
     * @return
     */
-    void add(${entity} param);
-
+    boolean createOrUpdate(${entity} entity);
     /**
-    * ${table.comment!}修改
-    * @param param 根据需要进行传值
-    * @return
-    */
-    void modify(${entity} param);
-
-    /**
-    * ${table.comment!}删除(单个条目)
+    * 根据id逻辑删除
     * @param id
     * @return
     */
-    void remove(Long id);
-
-    /**
-    * 删除(多个条目)
-    * @param ids
-    * @return
-    */
-    void removes(List<Long> ids);
+    boolean logicalDeleteById(Long id);
 }
-</#if>

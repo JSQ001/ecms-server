@@ -10,10 +10,7 @@ CREATE TABLE sequence (
 
 set global log_bin_trust_function_creators=1;
 
-
-DELIMITER /
-
-DROP FUNCTION IF EXISTS currval /
+DROP FUNCTION IF EXISTS currval;
 
 CREATE FUNCTION currval(seq_name VARCHAR(50))
     RETURNS BIGINT
@@ -24,14 +21,9 @@ FROM sequence
 WHERE upper(name) = upper(seq_name); -- 大小写不区分.
 RETURN value;
 END;
-/
-
-DELIMITER ;
 
 
-DELIMITER /
-
-DROP FUNCTION IF EXISTS nextval /
+DROP FUNCTION IF EXISTS nextval;
 
 CREATE FUNCTION nextval (seq_name VARCHAR(50))
     RETURNS BIGINT
@@ -42,13 +34,8 @@ SET current_value = current_value + increment
 WHERE upper(name) = upper(seq_name);
 RETURN currval(seq_name);
 END;
-/
 
-DELIMITER ;
-
-DELIMITER /
-
-DROP FUNCTION IF EXISTS setval /
+DROP FUNCTION IF EXISTS setval;
 
 CREATE FUNCTION setval (seq_name VARCHAR(50), value BIGINT)
     RETURNS BIGINT
@@ -58,6 +45,7 @@ SET current_value = value
 WHERE upper(name) = upper(seq_name);
 RETURN currval(seq_name);
 END;
-/
 
-DELIMITER ;
+
+INSERT INTO sequence VALUES ('TestSeq', 0, 1);
+SELECT nextval('TestSeq')

@@ -27,10 +27,7 @@ mybatis-plus:
   　　configuration:
     　　　　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-file:
-  #path:  /home/eicas/tools/xxgl/upload/
-  imagePath:  "/download/**/**"
-  path:  /Users/jsq/Desktop/img/
-  nginxPath: http://172.16.1.49:8012/download/
-
-chromePath: /home/eicas/eip/ecms/backend/phantomjs
+filePath:
+  image: /Users/jsq/work/code/中科/科大/ecms/img/
+  imageMappingPath: /download
+  phantomjs: /usr/local/bin/phantomjs

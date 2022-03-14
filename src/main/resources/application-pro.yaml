@@ -3,9 +3,9 @@ server:
   port: 8989
 spring:
   datasource:
-    url: jdbc:mysql://172.20.58.20:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:mysql://21.18.2.155:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
-    password: xxxxxx
+    password: root
     driverClassName: com.mysql.cj.jdbc.Driver
 
     #hikari数据库连接池
@@ -26,9 +26,7 @@ spring:
 mybatis-plus:
   　　configuration:
     　　　　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-file:
-  path:  /home/eicas/tools/xxgl/upload/
-  imagePath:  "/download/**/**"
-  nginxPath: http://172.16.1.49:8012/download/
-
-chromePath: /home/eicas/eip/ecms/backend/phantomjs
+filePath:
+  image: /Users/jsq/work/code/中科/科大/ecms/img/
+  imageMappingPath: /images
+  phantomjs: /usr/local/bin/phantomjs

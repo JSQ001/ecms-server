@@ -3,10 +3,12 @@ server:
   port: 8989
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:p6spy:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+#    url: jdbc:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
-    password: 123456
-    driverClassName: com.mysql.cj.jdbc.Driver
+    password: jsq123456
+    driverClassName: com.p6spy.engine.spy.P6SpyDriver
+#    driverClassName: com.mysql.cj.jdbc.Driver
 
     #hikari数据库连接池
     hikari:
@@ -23,12 +25,16 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/master.xml
 
-mybatis-plus:
-  　　configuration:
-    　　　　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-file:
-  path:  /home/eicas/tools/xxgl/upload/
-  imagePath:  "/download/**/**"
-  nginxPath: http://172.16.1.49:8012/download/
 
-chromePath: /home/eicas/eip/ecms/backend/phantomjs
+mybatis-plus:
+  configuration:
+    　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/com/eicas/cms/mapper/xml/*.xml
+
+filePath:
+  image: /Users/jsq/work/code/中科/科大/ecms/img/
+  imageMappingPath: /images
+  phantomjs: /usr/local/bin/phantomjs
+
+swagger3:
+  enable: true
