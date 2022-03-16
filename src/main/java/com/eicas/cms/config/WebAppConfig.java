@@ -1,6 +1,8 @@
 package com.eicas.cms.config;
 
+import com.eicas.cms.component.ClientAuthenticate;
 import com.eicas.cms.interceptor.FormatContentTypeInterceptor;
+import com.eicas.cms.interceptor.IsLoginInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +38,9 @@ public class WebAppConfig implements WebMvcConfigurer {
     * */
     @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
     private String localDateTimePattern;
+
+    @Resource
+    private IsLoginInterceptor isLoginInterceptor;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -58,6 +64,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册自定义拦截器
+        registry.addInterceptor(isLoginInterceptor);
         registry.addInterceptor(new FormatContentTypeInterceptor());
         //  .addPathPatterns("")
         //  .excludePathPatterns()

@@ -36,7 +36,7 @@ public class Test implements PageProcessor {
         Spider.create(new Test())
                 //从"https://github.com/code4craft"开始抓
                 .addUrl("https://github.com/code4craft")
-                .addPipeline(new MyPipeline())
+                .addPipeline(new StorePipeline())
                 .setDownloader(new WebDriverDownloader("/usr/local/bin/phantomjs"))
                 //开启5个线程抓取
                 .thread(5)
