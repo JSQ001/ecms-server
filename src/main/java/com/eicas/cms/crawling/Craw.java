@@ -21,7 +21,7 @@ public class Craw {
     private XPathPageProcessor pageProcessor;
 
     @Resource
-    private StorePipeline storePipeline;
+    private StorePipeline myPipeline;
 
     //phantomjs在系统存放的路径
     @Value("${filePath.phantomjs}")
@@ -38,7 +38,7 @@ public class Craw {
             pageProcessor.setCollectRule(collectRule);
 
             if(StringUtils.hasText(sessionId)){
-                storePipeline.setSessionId(sessionId);
+                myPipeline.setSessionId(sessionId);
                 pageProcessor.setSessionId(sessionId);
             }
 
@@ -47,7 +47,7 @@ public class Craw {
                    .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(10000000)))
                     .addUrl(collectRule.getCollectUrl())
                     .setDownloader(new WebDriverDownloader(phantomjsPath))
-                    .addPipeline(storePipeline)
+                    .addPipeline(myPipeline)
                     //开启5个线程抓取
                     .thread(5)
                     //启动爬虫

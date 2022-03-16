@@ -41,7 +41,8 @@ public class ClientAuthenticate {
     @Value("${oauth.clientSecret}")
     private String clientSecret;
 
-    private String redirectUrl;
+    @Value("${oauth.webUrl}")
+    private String webUrl;
 
     /**
      * 校验令牌（获取用户信息）

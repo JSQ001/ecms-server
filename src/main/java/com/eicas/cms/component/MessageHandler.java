@@ -24,7 +24,6 @@ public class MessageHandler {
 
     @Resource
     private ICollectRuleService iCollectRuleService;
-
     @Resource
     private Craw craw;
 
