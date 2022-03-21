@@ -100,7 +100,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty("是否焦点图显示")
     @TableField("is_focus")
-    private Boolean focus;
+    private Boolean isFocus;
 
     @ApiModelProperty("是否推荐")
     @TableField("is_recommended")
@@ -108,11 +108,11 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty("是否置顶")
     @TableField("is_top")
-    private Boolean top;
+    private Boolean isTop;
 
     @ApiModelProperty("是否大事")
     @TableField("is_major")
-    private Boolean major;
+    private Boolean isMajor;
 
     @ApiModelProperty("发布时间")
     @TableField(value = "publish_time", fill = FieldFill.INSERT)

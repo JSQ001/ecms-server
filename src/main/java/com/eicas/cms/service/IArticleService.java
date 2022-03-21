@@ -66,5 +66,10 @@ public interface IArticleService extends IService<Article> {
      * 批量更新文章
     * @return
     */
-    boolean auditArticle(List<ArticleAuditVO> articleList);
+    boolean auditArticle(ArticleAuditVO articleAuditVO);
+
+    /**
+    * 修改热点新闻
+    */
+    boolean modifyFocus(Long id, boolean isFocus);
 }

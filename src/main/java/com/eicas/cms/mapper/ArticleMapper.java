@@ -7,6 +7,7 @@ import com.eicas.cms.pojo.vo.ArticleAuditVO;
 import com.eicas.cms.pojo.vo.ArticleVO;
 import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,17 +25,34 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * 分页条件查询article
      * */
     @Select("<script>" +
-            "select a.id,column_id,c.name as columnName, title, sub_title, a.sort_order, a.keyword, content, essential, is_top, is_major,a.publish_time," +
-                    "a.cover_img_url, link_url, a.type, author, source, state, is_show, is_focus, is_recommended,hit_nums " +
-            "from cms_article as a, cms_column as c" +
+            "select a.id,a.column_id,c.name as columnName, title, sub_title, a.sort_order, a.keyword, a.content, a.essential, a.is_top, a.is_major,a.publish_time," +
+                    "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums " +
+            "from cms_article as a " +
+            "left join cms_column as c on c.id = a.column_id " +
             "<where>" +
-            "   column_id = c.id and a.is_deleted = 0" +
-            "<if test='param.columnId != null and param.columnId!=\"\"'>" +
-            "   and column_id = #{param.columnId}" +
+            "   a.is_deleted = 0" +
+            "<if test='ids != null'>" +
+            "  and a.column_id in " +
+            "  <foreach item=\"item\" index=\"index\" collection=\"ids\" open=\"(\" separator=\",\" close=\")\">\n" +
+            "      #{item}\n" +
+            "  </foreach> " +
             "</if>" +
             "<if test='param.state != null and param.state!=\"\"'>" +
-            "   and state = #{param.state}" +
-            "</if>" +
+            "   <choose>\n" +
+            "      <when test='param.state == 5'>\n" +
+            "           and a.state in  (2,3)" +
+            "      </when>\n" +
+            "      <otherwise>\n" +
+            "           and a.state = #{param.state} " +
+            "      </otherwise>\n" +
+            "   </choose>  " +
+            "</if> " +
+            "<if test='param.isFocus != null and param.isFocus !=\"\"'>" +
+            "   and a.is_focus = #{param.isFocus}" +
+            "</if>  " +
+            "<if test='param.isTop != null and param.isTop !=\"\"'>" +
+            "   and a.is_top = #{param.isTop}" +
+            "</if>  " +
             "<when test='param.startTime != null'>" +
             "   and a.publish_time &gt;= #{param.startTime}" +
             "</when>"+
@@ -42,12 +60,12 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "   and a.publish_time &lt;= #{param.endTime}" +
             "</when>"+
             "<when test='param.title != null and param.title!=\"\" '>" +
-            "   and title like concat('%',#{param.title, jdbcType=VARCHAR},'%')" +
+            "   and a.title like concat('%',#{param.title, jdbcType=VARCHAR},'%')" +
             "</when>" +
             "</where>" +
-            " ORDER BY sort_order, a.publish_time desc, a.updated_time desc" +
+            " ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
             "</script>")
-    Page<Article> listArticles(@Param("param") ArticleVO param, Page page);
+    Page<Article> listArticles(@Param("ids") List<Long> ids, @Param("param") ArticleVO param, Page page);
 
     /**
      * 统计文章信息
@@ -68,6 +86,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "</when>"+
             "</where>" +
             "</script>")
+    @Results({@Result(column="id", property="id", id=true)})
     ArticleStatisticalResults statistics(@Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
     /**
@@ -91,12 +110,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "   and c.id in (select id from cms_column  where parent_id = (select id from cms_column where code = #{code}))\n" +
             "</where>" +
             "group by column_id "+
-            "</script>")
+            "</script>"
+    )
     List<ArticleStatisticalResults> statisticByColumn(@Param("code") String code, @Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
-
-    /**
-     * 审核文章接口
-     * */
-    boolean auditArticle(@Param("list") List<ArticleAuditVO> list);
 }
 

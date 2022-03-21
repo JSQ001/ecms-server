@@ -46,6 +46,9 @@ public class XPathPageProcessor implements PageProcessor {
                 page.putField("subTitle", page.getHtml().xpath(collectRule.getSubTitleRule()).toString());
             }
 
+            if(StringUtils.hasText(collectRule.getEssentialRule())){
+                page.putField("essential", page.getHtml().xpath(collectRule.getEssentialRule()).toString());
+            }
             if(StringUtils.hasText(collectRule.getAuthorRule())){
                 page.putField("author", page.getHtml().xpath(collectRule.getAuthorRule()).toString());
             }
@@ -69,7 +72,6 @@ public class XPathPageProcessor implements PageProcessor {
                         page.addTargetRequests(link.all());
                         int size = link.nodes().size();
                         MyWebsocketServer.pageQueue.put(sessionId,MyWebsocketServer.pageQueue.get(sessionId)+size);
-                        //page.addTargetRequests(page.getHtml().xpath(collectRule.getLinksRule()).all());
                     }
                 });
             }

@@ -1,8 +1,11 @@
 package com.eicas.cms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.eicas.cms.component.MyWebsocketServer;
+import com.eicas.cms.exception.BusinessException;
 import com.eicas.cms.pojo.entity.Article;
+import com.eicas.cms.pojo.enumeration.ResultCode;
 import com.eicas.cms.pojo.vo.ArticleAuditVO;
 import com.eicas.cms.pojo.vo.ArticleVO;
 import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
@@ -11,6 +14,7 @@ import com.eicas.cms.mapper.ArticleMapper;
 import com.eicas.cms.service.IArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.service.IColumnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +42,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
 
+    @Resource
+    private IColumnService columnService;
+
     @Override
     public Page<Article> listArticles(ArticleVO articleQueryVo) {
-        return articleMapper.listArticles(articleQueryVo, articleQueryVo.pageFactory());
+        List<Long> ids = null;
+        if(articleQueryVo.getColumnId() != null){
+            ids = columnService.listIdsByParentId(articleQueryVo.getColumnId());
+        }
+        return articleMapper.listArticles(ids,articleQueryVo, articleQueryVo.pageFactory());
     }
 
     /**
@@ -61,10 +72,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //去重入库
         QueryWrapper<Article> queryWrapper = new QueryWrapper<Article>()
                 .select("id")
-                .eq(entity.getContent() != null, "column_id",entity.getColumnId())
-                .eq(entity.getSource() != null, "source",entity.getSource())
-                .eq(entity.getTitle() != null, "title",entity.getTitle())
-                .eq(entity.getAuthor() != null, "author",entity.getAuthor());
+                .eq(entity.getColumnId() != null, "column_id",entity.getColumnId())
+                .eq( StringUtils.hasText(entity.getContent()), "content",entity.getContent())
+                .eq( StringUtils.hasText(entity.getSource()), "source",entity.getSource())
+                .eq( StringUtils.hasText(entity.getTitle()), "title",entity.getTitle())
+                .eq( StringUtils.hasText(entity.getAuthor()), "author",entity.getAuthor());
 
         List<Article> article = this.list(queryWrapper);
         boolean flag = false;
@@ -93,8 +105,31 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public boolean auditArticle(List<ArticleAuditVO> list) {
-        return articleMapper.auditArticle(list);
+    public boolean auditArticle(ArticleAuditVO articleAuditVO) {
+        if(articleAuditVO.getAuditTime() == null){
+            articleAuditVO.setAuditTime(LocalDateTime.now());
+        }
+        UpdateWrapper<Article> wrapper = new UpdateWrapper<>();
+        wrapper.lambda()
+                .set(Article::getState, articleAuditVO.getState())
+                .set(Article::getAuditUserId, articleAuditVO.getAuditUserId())
+                .set(StringUtils.hasText(articleAuditVO.getAuditComments()), Article::getAuditComments, articleAuditVO.getAuditComments())
+                .in(Article::getId,articleAuditVO.getArticleIds());
+        return update(wrapper);
+    }
+
+    @Override
+    public boolean modifyFocus(Long id, boolean isFocus) {
+        Article article = getById(id);
+        if(article == null){
+            return false;
+        }
+        if(!StringUtils.hasText(article.getCoverImgUrl())){
+            throw new BusinessException(ResultCode.ARTICLE_NO_FOCUS_IMG);
+        }
+        article.setIsFocus(isFocus);
+
+        return updateById(article);
     }
 
     /**

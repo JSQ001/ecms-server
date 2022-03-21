@@ -29,4 +29,10 @@ public class ArticleVO extends BaseVO implements Serializable {
     @ApiModelProperty("文章标题")
     private String title;
 
+    @ApiModelProperty("焦点新闻")
+    private Boolean isFocus;
+
+    @ApiModelProperty("置顶")
+    private Boolean isTop;
+
 }

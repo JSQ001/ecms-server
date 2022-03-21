@@ -2,11 +2,8 @@ package com.eicas.cms.controller;
 
 import com.eicas.cms.component.ClientAuthenticate;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -27,16 +24,10 @@ public class OauthController {
         return String.format("redirect:%s/oauth/authorize.do?response_type=code&client_id=%s",clientAuthenticate.getOauthServer(),clientAuthenticate.getClientId());
     }
 
-    @GetMapping("/authorization")
-    public String authorization(String code) {
-        clientAuthenticate.getAccessTokenByCode(code);
-        return "redirect:" + clientAuthenticate.getWebUrl();
-    }
 
     @GetMapping("/loginOut")
     public String loginOut() {
         clientAuthenticate.setTokenInfo(null);
-
         return String.format("redirect:%s/oauth/signoff.do?clientid=%s&secret=%s&redirectUri=%s",
                 clientAuthenticate.getOauthServer(),
                 clientAuthenticate.getClientId(),
@@ -44,7 +35,5 @@ public class OauthController {
                 clientAuthenticate.getWebUrl()
         );
     }
-
-
 
 }

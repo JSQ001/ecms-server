@@ -52,7 +52,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
            }
        }
 
-       //serverHttpResponse.setStatusCode(HttpStatus.OK);
+       serverHttpResponse.setStatusCode(HttpStatus.OK);
        return data instanceof BaseResponse ? data : new BaseResponse<>(data);
    }
 }

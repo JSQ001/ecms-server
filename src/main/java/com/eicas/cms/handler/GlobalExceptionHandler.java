@@ -2,6 +2,7 @@ package com.eicas.cms.handler;
 
 import com.eicas.cms.exception.APIException;
 import com.eicas.cms.component.BaseResponse;
+import com.eicas.cms.exception.BusinessException;
 import com.eicas.cms.pojo.enumeration.ResultCode;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,14 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public BaseResponse<Object> APIExceptionHandler(APIException e) {
     log.error("api异常！");
-    return  new BaseResponse<>(ResultCode.FAILED, e.getMessage());
+    return new BaseResponse<>(ResultCode.FAILED, e.getMessage());
+  }
+
+  @ExceptionHandler(BusinessException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public BaseResponse<Object> BusinessExceptionHandler(BusinessException e) {
+    log.error(e.getResultCode().getMessage());
+    return new BaseResponse<>(e.getResultCode(),null);
   }
 
   /**
@@ -59,7 +67,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
   public BaseResponse<Object> httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
     log.error("请求数据媒体格式错误！");
-    return  new BaseResponse<>(ResultCode.FAILED, e.getMessage());
+    return new BaseResponse<>(ResultCode.FAILED, e.getMessage());
   }
   // 数据格式转换异常
   @ExceptionHandler(InvalidFormatException.class)

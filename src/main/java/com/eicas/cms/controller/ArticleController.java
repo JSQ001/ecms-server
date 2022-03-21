@@ -86,8 +86,15 @@ public class ArticleController {
 
     @ApiOperation(value = "审核文章")
     @PostMapping("/audit")
-    public Boolean auditArticle(@RequestBody List<ArticleAuditVO> articleList){
-        return iArticleService.auditArticle(articleList);
+    public Boolean auditArticle(@Valid @RequestBody ArticleAuditVO articleAuditVO){
+        return iArticleService.auditArticle(articleAuditVO);
+    }
+
+
+    @ApiOperation(value = "设置(取消设置)焦点新闻")
+    @PostMapping("/modify/focus")
+    public Boolean modifyFocus(Long id, Boolean isFocus){
+        return iArticleService.modifyFocus(id, isFocus);
     }
 
 }

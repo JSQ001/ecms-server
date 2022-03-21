@@ -28,7 +28,10 @@ public enum ResultCode {
 
   USER_NOT_LOGIN_IN(2001, "用户未登录"),
 
-  ACCOUNT_NOT_EXIST(2002, "账号不存在");
+  ACCOUNT_NOT_EXIST(2002, "账号不存在"),
+
+
+  ARTICLE_NO_FOCUS_IMG(3000, "文章没有焦点图片");
 
   private final Integer code;
   private final String message;

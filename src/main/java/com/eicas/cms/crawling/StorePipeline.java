@@ -53,6 +53,7 @@ public class StorePipeline implements Pipeline {
                 .setAuthor(resultItems.get("author"))
                 .setSource(resultItems.get("source"))
                 .setContent(resultItems.get("content"))
+                .setEssential(resultItems.get("essential"))
                 .setSubTitle(resultItems.get("subTitle"));
         try{
             DateTime publishTime = DateUtil.parse(resultItems.get("publishTime"));
@@ -83,6 +84,7 @@ public class StorePipeline implements Pipeline {
                             if(count++ == 0){
                                 // 将第一张图片设为焦点图
                                 article.setCoverImgUrl(urlFile);
+                                article.setIsFocus(true);
                             }
                         }
                     } catch (Exception e) {

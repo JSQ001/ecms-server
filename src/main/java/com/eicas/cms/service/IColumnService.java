@@ -40,9 +40,23 @@ public interface IColumnService extends IService<Column> {
 
     /**
      * 新建或更新
-     * @param param 栏目id
+     * @param entity 栏目id
      * @return
      */
     boolean createOrUpdate(Column entity);
+
+    /**
+     * 根据父栏目code查询子栏目列表
+     * @param code
+     * @return
+     */
+    List<Column> listByParentCode(String code);
+
+    /**
+     * 根据父栏目id查询叶子栏目
+     * @param id
+     * @return
+     */
+    List<Long> listIdsByParentId(Long id);
 
 }

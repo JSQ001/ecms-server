@@ -10,9 +10,12 @@ import lombok.Getter;
 public class APIException extends RuntimeException {
     private int code;
     private String message;
+
     public APIException() {
         this(ResultCode.FAILED);
-    }    public APIException(ResultCode failed) {
+    }
+    public APIException(ResultCode failed) {
         this.code=failed.getCode();
         this.message=failed.getMessage();
-    }}
+    }
+}
