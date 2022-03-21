@@ -48,6 +48,12 @@ public class ColumnController {
         return iColumnService.getColumnTree(id);
     }
 
+    @ApiOperation(value = "根据父栏目code查询子栏目列表", response = Column.class)
+    @GetMapping(value = "/listByParentCode")
+    public List<Column> listByParentCode(String code) {
+        return iColumnService.listByParentCode(code);
+    }
+
     @ApiOperation(value = "栏目表新增/修改")
     @PostMapping(value = "/createOrUpdate")
     public boolean createOrUpdate(@Valid @RequestBody Column entity) {

@@ -101,11 +101,10 @@ public interface ColumnMapper extends BaseMapper<Column> {
     List<Column> queryByParams(@Param("entity")Column entity);
 
     /**
-     * 通过叶子id查询栏目
+     * 通过id查询栏目
      * */
-
     @Select(
-        "select id,parent_id,code,name, parent_id as parentId from cms_column " +
+        "select id, code ,name, parent_id as parentId from cms_column " +
         "where id = #{id}"
     )
     @Results(
@@ -113,4 +112,14 @@ public interface ColumnMapper extends BaseMapper<Column> {
     )
     List<Column> getColumnById(Long id);
 
+
+    /**
+     * 根据父栏目code查询子栏目
+     * */
+    @Select(
+            "select id, code, name, parent_id as parentId " +
+            "from cms_column " +
+            "where parent_id = (select id from cms_column where code = #{code})"
+    )
+    List<Column> listByParentCode(String code);
 }

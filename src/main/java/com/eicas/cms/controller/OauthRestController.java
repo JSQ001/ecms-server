@@ -17,7 +17,7 @@ public class OauthRestController {
 
 
     @GetMapping("/getToken")
-    public String getToken () {
-        return clientAuthenticate.getTokenInfo();
+    public String getToken (String code) {
+        return clientAuthenticate.getAccessTokenByCode(code);
     }
 }

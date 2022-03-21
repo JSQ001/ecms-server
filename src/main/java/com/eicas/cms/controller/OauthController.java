@@ -27,16 +27,10 @@ public class OauthController {
         return String.format("redirect:%s/oauth/authorize.do?response_type=code&client_id=%s",clientAuthenticate.getOauthServer(),clientAuthenticate.getClientId());
     }
 
-    @GetMapping("/authorization")
-    public String authorization(String code) {
-        clientAuthenticate.getAccessTokenByCode(code);
-        return "redirect:" + clientAuthenticate.getWebUrl();
-    }
 
     @GetMapping("/loginOut")
     public String loginOut() {
         clientAuthenticate.setTokenInfo(null);
-
         return String.format("redirect:%s/oauth/signoff.do?clientid=%s&secret=%s&redirectUri=%s",
                 clientAuthenticate.getOauthServer(),
                 clientAuthenticate.getClientId(),
@@ -44,7 +38,5 @@ public class OauthController {
                 clientAuthenticate.getWebUrl()
         );
     }
-
-
 
 }

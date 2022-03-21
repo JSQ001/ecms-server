@@ -2,7 +2,9 @@ package com.eicas.cms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.eicas.cms.component.MyWebsocketServer;
+import com.eicas.cms.mapper.ColumnMapper;
 import com.eicas.cms.pojo.entity.Article;
+import com.eicas.cms.pojo.entity.Column;
 import com.eicas.cms.pojo.vo.ArticleAuditVO;
 import com.eicas.cms.pojo.vo.ArticleVO;
 import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
@@ -11,6 +13,7 @@ import com.eicas.cms.mapper.ArticleMapper;
 import com.eicas.cms.service.IArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.service.IColumnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +41,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
 
+    @Resource
+    private IColumnService columnService;
+
     @Override
     public Page<Article> listArticles(ArticleVO articleQueryVo) {
-        return articleMapper.listArticles(articleQueryVo, articleQueryVo.pageFactory());
+        List<Long> ids = null;
+        if(articleQueryVo.getColumnId() != null){
+            ids = columnService.listIdsByParentId(articleQueryVo.getColumnId());
+        }
+        return articleMapper.listArticles(ids,articleQueryVo, articleQueryVo.pageFactory());
     }
 
     /**

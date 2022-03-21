@@ -24,16 +24,20 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * 分页条件查询article
      * */
     @Select("<script>" +
-            "select a.id,column_id,c.name as columnName, title, sub_title, a.sort_order, a.keyword, content, essential, is_top, is_major,a.publish_time," +
+            "select a.id,a.column_id,c.name as columnName, title, sub_title, a.sort_order, a.keyword, content, essential, is_top, is_major,a.publish_time," +
                     "a.cover_img_url, link_url, a.type, author, source, state, is_show, is_focus, is_recommended,hit_nums " +
-            "from cms_article as a, cms_column as c" +
+            "from cms_article as a " +
+            "left join cms_column as c on c.id = a.column_id " +
             "<where>" +
-            "   column_id = c.id and a.is_deleted = 0" +
-            "<if test='param.columnId != null and param.columnId!=\"\"'>" +
-            "   and column_id = #{param.columnId}" +
+            "   a.is_deleted = 0" +
+            "<if test='ids != null'>" +
+            "  and a.column_id in " +
+            "  <foreach item=\"item\" index=\"index\" collection=\"ids\" open=\"(\" separator=\",\" close=\")\">\n" +
+            "      #{item}\n" +
+            "  </foreach> " +
             "</if>" +
             "<if test='param.state != null and param.state!=\"\"'>" +
-            "   and state = #{param.state}" +
+            "   and a.state = #{param.state}" +
             "</if>" +
             "<when test='param.startTime != null'>" +
             "   and a.publish_time &gt;= #{param.startTime}" +
@@ -42,12 +46,12 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "   and a.publish_time &lt;= #{param.endTime}" +
             "</when>"+
             "<when test='param.title != null and param.title!=\"\" '>" +
-            "   and title like concat('%',#{param.title, jdbcType=VARCHAR},'%')" +
+            "   and a.title like concat('%',#{param.title, jdbcType=VARCHAR},'%')" +
             "</when>" +
             "</where>" +
-            " ORDER BY sort_order, a.publish_time desc, a.updated_time desc" +
+            " ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
             "</script>")
-    Page<Article> listArticles(@Param("param") ArticleVO param, Page page);
+    Page<Article> listArticles(@Param("ids") List<Long> ids, @Param("param") ArticleVO param, Page page);
 
     /**
      * 统计文章信息

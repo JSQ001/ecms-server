@@ -64,7 +64,6 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
         }
     }
 
-
     @Override
     public List<Column> getColumnTree(Long id) {
         return columnMapper.selectTreeByParentId(id);
@@ -80,5 +79,30 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
         return saveOrUpdate(entity);
     }
 
+    @Override
+    public List<Column> listByParentCode(String code) {
+        return columnMapper.listByParentCode(code);
+    }
 
+    @Override
+    public List<Long> listIdsByParentId(Long id) {
+        List<Column> list = columnMapper.selectTreeByParentId(id);
+        List<Long> result = new ArrayList<Long>();
+        result.add(id);
+        deep(list,result);
+        return result;
+    }
+
+    /**
+     * 递归获取栏目id集合
+     * */
+    private void deep(List<Column> source, List<Long> target){
+        source.forEach(i->{
+            target.add(i.getId());
+            if(i.getChildren() !=null){
+                deep(i.getChildren(),target);
+            }
+        });
+
+    }
 }
