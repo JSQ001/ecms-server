@@ -3,7 +3,7 @@ server:
   port: 18989
 spring:
   datasource:
-    url: jdbc:p6spy:mysql://172.20.58.20:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:p6spy:mysql://172.20.58.101:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     #    url: jdbc:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
     password: xxxxxx
@@ -32,7 +32,7 @@ mybatis-plus:
   mapper-locations: classpath:/com/eicas/cms/mapper/xml/*.xml
 
 filePath:
-  image: /Users/jsq/work/code/中科/科大/ecms/img/
+  image: C:\Users\Administrator\Desktop\img\
   imageMappingPath: /images/
   phantomjs: /usr/local/bin/phantomjs
 
@@ -40,7 +40,7 @@ swagger3:
   enable: true
 
 oauth:
-  server: http://172.20.58.20:9100
+  server: http://172.20.58.101:9100
   webUrl: http://localhost:8080/ecms-mgt
   clientId: ecms-mgt
   clientSecret: ecms-mgt
