@@ -12,6 +12,11 @@ import lombok.Getter;
 @Getter
 public enum ResultCode {
 
+  Sql_ERROR(2001, "数据异常，请稍后重试"),
+
+  ARTICLE_COULUM_FILE(3004, "此栏目已关联文章"),
+
+
   SUCCESS(200, "成功"),
 
   FAILED(500, "接口错误"),
@@ -30,8 +35,9 @@ public enum ResultCode {
 
   ACCOUNT_NOT_EXIST(2002, "账号不存在"),
 
-
   ARTICLE_NO_FOCUS_IMG(3000, "文章没有焦点图片");
+
+
 
   private final Integer code;
   private final String message;

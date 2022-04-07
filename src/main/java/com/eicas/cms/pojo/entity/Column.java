@@ -87,6 +87,11 @@ public class Column extends BaseEntity implements Serializable {
     @TableField("list_template_url")
     private String listTemplateUrl;
 
+
+    @TableField("column_code")
+    private String columnCode;
+
+
     @TableField(exist = false)
     private List<Column> children;
 

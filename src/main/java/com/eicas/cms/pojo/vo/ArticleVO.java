@@ -35,4 +35,18 @@ public class ArticleVO extends BaseVO implements Serializable {
     @ApiModelProperty("置顶")
     private Boolean isTop;
 
+    @ApiModelProperty("时间标签")
+    private String timeTab;
+
+    private  Boolean isMajor;
+    private Boolean isNotice;
+
+
+
+    private int paramDateType;
+    private  int paramDateNum;
+
+
+    private String columnCode;
+
 }

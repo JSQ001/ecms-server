@@ -6,6 +6,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import us.codecraft.webmagic.downloader.PhantomJSDownloader;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

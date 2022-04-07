@@ -2,18 +2,16 @@ package com.eicas.cms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.eicas.cms.component.MyWebsocketServer;
+//import com.eicas.cms.component.MyWebsocketServer;
 import com.eicas.cms.exception.BusinessException;
 import com.eicas.cms.pojo.entity.Article;
 import com.eicas.cms.pojo.enumeration.ResultCode;
-import com.eicas.cms.pojo.vo.ArticleAuditVO;
-import com.eicas.cms.pojo.vo.ArticleVO;
-import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
-import com.eicas.cms.pojo.vo.WebSocketResponseToClient;
+import com.eicas.cms.pojo.vo.*;
 import com.eicas.cms.mapper.ArticleMapper;
 import com.eicas.cms.service.IArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.service.ICollectRuleService;
 import com.eicas.cms.service.IColumnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -45,13 +45,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private IColumnService columnService;
 
+    @Resource
+    private ICollectRuleService iCollectRuleService;
+
+
     @Override
     public Page<Article> listArticles(ArticleVO articleQueryVo) {
-        List<Long> ids = null;
+      /*  List<Long> ids = null;
         if(articleQueryVo.getColumnId() != null){
             ids = columnService.listIdsByParentId(articleQueryVo.getColumnId());
         }
-        return articleMapper.listArticles(ids,articleQueryVo, articleQueryVo.pageFactory());
+        return articleMapper.listArticles(ids,articleQueryVo, articleQueryVo.pageFactory());  */
+
+
+        return articleMapper.listArticlesA(articleQueryVo, articleQueryVo.pageFactory());
+
+
+
     }
 
     /**
@@ -70,7 +80,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public boolean saveCrawl(Article entity, String sessionId){
         //去重入库
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<Article>()
+       /* QueryWrapper<Article> queryWrapper = new QueryWrapper<Article>()
                 .select("id")
                 .eq(entity.getColumnId() != null, "column_id",entity.getColumnId())
                 .eq( StringUtils.hasText(entity.getContent()), "content",entity.getContent())
@@ -78,19 +88,45 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .eq( StringUtils.hasText(entity.getTitle()), "title",entity.getTitle())
                 .eq( StringUtils.hasText(entity.getAuthor()), "author",entity.getAuthor());
 
+
         List<Article> article = this.list(queryWrapper);
+
+        */ //columnId  content  source  title  author
+
+        if  (entity.getContent()==null||entity.getContent().equals("")){
+            return false;
+        }
+
+        if  (entity.getTitle()==null||entity.getTitle().equals("")){
+            return false;
+        }
+
+        Map<String,Object> duplicateMap= new HashMap<>();
+        duplicateMap.put("columnId",entity.getColumnId());
+        duplicateMap.put("title",entity.getTitle());
+        duplicateMap.put("author",entity.getAuthor());
+        duplicateMap.put("ontent",entity.getContent());
+
         boolean flag = false;
-        if(article.size() > 0){
+
+
+        if(articleMapper.listCount(duplicateMap)> 0){
             log.info("文章已存在");
         }else {
-            flag =  customSave(entity);
-        }
-        int count = MyWebsocketServer.pageQueue.get(sessionId);
-        MyWebsocketServer.pageQueue.put(sessionId, count -1 );
 
-        if(StringUtils.hasText(sessionId) && MyWebsocketServer.pageQueue.get(sessionId) == 0){
-            MyWebsocketServer.sendMessage(sessionId, new WebSocketResponseToClient(200, "爬取成功！"));
+
+            if (entity.getEssential()==null||entity.getEssential().equals("")){
+                entity.setEssential(entity.getContent().substring(0,100));
+            }
+            flag =  customSave(entity);
+
         }
+       // int count = MyWebsocketServer.pageQueue.get(sessionId);
+        //MyWebsocketServer.pageQueue.put(sessionId, count -1 );
+
+        //if(StringUtils.hasText(sessionId) && MyWebsocketServer.pageQueue.get(sessionId) == 0){
+          //  MyWebsocketServer.sendMessage(sessionId, new WebSocketResponseToClient(200, "爬取成功！"));
+       // }
         return flag;
     }
 
@@ -154,6 +190,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public boolean batchDel(List<Long> ids) {
         return removeBatchByIds(ids);
     }
+
+    /**
+     *自动采集重复查询
+     * */
+    @Override
+    public  int listCount(Map paramMap){
+        return  articleMapper.listCount(paramMap);
+    }
+
+
 
 
 }

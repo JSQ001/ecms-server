@@ -1,18 +1,24 @@
 package com.eicas.cms.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.pojo.entity.CollectRule;
 import com.eicas.cms.pojo.entity.Column;
 import com.eicas.cms.pojo.vo.ColumnVO;
+import com.eicas.cms.pojo.vo.MoveColumneV0;
 import com.eicas.cms.service.IColumnService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,6 +45,7 @@ public class ColumnController {
     })
     @GetMapping(value = "/list")
     public Page<Column> listColumns(ColumnVO columnVo) {
+
         return iColumnService.listColumns(columnVo);
     }
 
@@ -54,6 +61,10 @@ public class ColumnController {
         return iColumnService.listByParentCode(code);
     }
 
+
+
+
+
     @ApiOperation(value = "栏目表新增/修改")
     @PostMapping(value = "/createOrUpdate")
     public boolean createOrUpdate(@Valid @RequestBody Column entity) {
@@ -67,4 +78,23 @@ public class ColumnController {
     public boolean logicalDelete(@PathVariable(value="id") Long id){
         return iColumnService.logicalDeleteById(id);
     }
+
+
+    @ApiOperation(value = "栏目剧移动")
+    @ApiImplicitParams({@ApiImplicitParam(name = "sourceid", value = "sourceid",required = true,  dataTypeClass = Long.class)})
+
+    @PostMapping("/movecolumne")
+    public boolean movecolumne(@RequestBody MoveColumneV0 moveColumneV0){
+
+        Map<String,Object> columnMap= new HashMap<>();
+        columnMap.put("columnCode",moveColumneV0.getColumnCode());
+        columnMap.put("targertid",moveColumneV0.getTargetId());
+        columnMap.put("sourceid",moveColumneV0.getSourceId());
+
+        if (iColumnService.MoveColumn(columnMap)>0) return  true;
+               else return  false;
+    }
+
+
+
 }

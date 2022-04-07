@@ -54,7 +54,9 @@ public class StorePipeline implements Pipeline {
                 .setSource(resultItems.get("source"))
                 .setContent(resultItems.get("content"))
                 .setEssential(resultItems.get("essential"))
+                .setRemarks(resultItems.get("id").toString())
                 .setSubTitle(resultItems.get("subTitle"));
+
         try{
             DateTime publishTime = DateUtil.parse(resultItems.get("publishTime"));
             article.setPublishTime(publishTime.toLocalDateTime());
@@ -74,7 +76,7 @@ public class StorePipeline implements Pipeline {
                 // 遍历节点，查找图片并保存
                 byte count = 0;
                 for (Element img : imgList) {
-                    String url = img.attr("src");
+                    String url = img.attr("abs:src");
                     String[] names = url.split("/");
                     String name = names[names.length-1];
                     try {
@@ -98,4 +100,5 @@ public class StorePipeline implements Pipeline {
         }
         iArticleService.saveCrawl(article,sessionId);
     }
+
 }

@@ -5,6 +5,7 @@ import com.eicas.cms.component.BaseResponse;
 import com.eicas.cms.exception.BusinessException;
 import com.eicas.cms.pojo.enumeration.ResultCode;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
@@ -76,5 +77,18 @@ public class GlobalExceptionHandler {
     log.error("数据转换异常！" + e.getMessage());
     return new BaseResponse<>(ResultCode.FAILED, e.getMessage());
   }
+
+
+  @ExceptionHandler(MysqlDataTruncation.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public BaseResponse<Object> mysqlDataTruncation(MysqlDataTruncation e) {
+    log.error("数据转换异常！" + e.getMessage());
+    return new BaseResponse<>(ResultCode.Sql_ERROR, e.getMessage());
+  }
+
+
+
+
+
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.pojo.vo.ColumnVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -58,5 +59,14 @@ public interface IColumnService extends IService<Column> {
      * @return
      */
     List<Long> listIdsByParentId(Long id);
+
+
+    /**
+     *栏目移动
+     * @param目标栏目id ,目标栏目上级id,目标栏目层级关秀
+     * @return
+     * */
+    int MoveColumn(Map columnentity);
+
 
 }

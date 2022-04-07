@@ -1,6 +1,6 @@
 package com.eicas.cms.crawling;
 
-import com.eicas.cms.component.MyWebsocketServer;
+//import com.eicas.cms.component.MyWebsocketServer;
 import com.eicas.cms.pojo.entity.CollectRule;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,8 +55,9 @@ public class XPathPageProcessor implements PageProcessor {
             if(StringUtils.hasText(collectRule.getPubTimeRule())){
                 page.putField("publishTime", page.getHtml().xpath(collectRule.getPubTimeRule()).toString());
             }
+            page.putField("id", collectRule.getId());
 
-    //        if (page.getResultItems().get("name") == null) {
+            //        if (page.getResultItems().get("name") == null) {
     //            //skip this page
     //            page.setSkip(true);
     //        }
@@ -71,7 +72,7 @@ public class XPathPageProcessor implements PageProcessor {
                         //添加子页面链接的规则
                         page.addTargetRequests(link.all());
                         int size = link.nodes().size();
-                        MyWebsocketServer.pageQueue.put(sessionId,MyWebsocketServer.pageQueue.get(sessionId)+size);
+                        //MyWebsocketServer.pageQueue.put(sessionId,MyWebsocketServer.pageQueue.get(sessionId)+size);
                     }
                 });
             }

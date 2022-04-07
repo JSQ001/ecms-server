@@ -4,11 +4,13 @@ import com.eicas.cms.pojo.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.pojo.vo.ArticleAuditVO;
+import com.eicas.cms.pojo.vo.ArticleDateVo;
 import com.eicas.cms.pojo.vo.ArticleVO;
 import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -72,4 +74,12 @@ public interface IArticleService extends IService<Article> {
     * 修改热点新闻
     */
     boolean modifyFocus(Long id, boolean isFocus);
+
+    /**
+    *自动采集重复查询
+    * */
+    int listCount(Map paramMap);
+
+
+
 }

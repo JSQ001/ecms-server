@@ -114,6 +114,15 @@ public class Article extends BaseEntity implements Serializable {
     @TableField("is_major")
     private Boolean isMajor;
 
+
+
+    @ApiModelProperty("是否公告")
+    @TableField("is_notice")
+    private Boolean isNotice;
+
+
+
+
     @ApiModelProperty("发布时间")
     @TableField(value = "publish_time", fill = FieldFill.INSERT)
     private LocalDateTime publishTime;
@@ -133,6 +142,12 @@ public class Article extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private LocalDateTime endTime;
 
-    @TableField(exist = false)
+
+    @TableField("column_code")
+    private String columnCode;
+
+    @TableField("column_name")
     private String columnName;
+
+
 }

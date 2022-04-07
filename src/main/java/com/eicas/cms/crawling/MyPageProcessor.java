@@ -9,6 +9,9 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 /**
 * PageProcessor的定制分为三个部分，分别是爬虫的配置、页面元素的抽取和链接的发现。
 * */
@@ -16,7 +19,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 @Getter
 @Setter
 @Slf4j
-public class MyPageProcessor implements PageProcessor {
+public class MyPageProcessor implements PageProcessor, Closeable {
 
     // 部分一：抓取网站的相关配置，包括编码、抓取间隔、重试次数等
     private Site site = Site.me().setRetryTimes(5).setSleepTime(5000);
@@ -58,4 +61,8 @@ public class MyPageProcessor implements PageProcessor {
         }
     }
 
+    @Override
+    public void close() throws IOException {
+
+    }
 }

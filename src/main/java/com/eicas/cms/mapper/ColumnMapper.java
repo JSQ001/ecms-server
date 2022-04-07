@@ -2,12 +2,14 @@ package com.eicas.cms.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.pojo.entity.Article;
 import com.eicas.cms.pojo.entity.Column;
 import com.eicas.cms.pojo.vo.ColumnVO;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,7 +40,9 @@ public interface ColumnMapper extends BaseMapper<Column> {
                         "</when>"+
                         "<when test='entity.endTime != null'>" +
                             "and publish_time &lt;= #{entity.endTime}" +
+                            " and publish_time  is not null" +
                         "</when>"+
+
                     "</where>" +
             ")" +
         "</script>"
@@ -56,8 +60,9 @@ public interface ColumnMapper extends BaseMapper<Column> {
     @Select(
         "<script>" +
             "select id, code, parent_id, name, type, path, publish_time, sort_order, keyword, " +
-            "custom_url, description from cms_column" +
+            "custom_url, column_code,description from cms_column" +
             "<where>" +
+                "       and is_deleted = 0 " +
                 "<choose>" +
                     "<when test='id != \"\" and id != null '>" +
                         "and parent_id = #{id}" +
@@ -74,6 +79,36 @@ public interface ColumnMapper extends BaseMapper<Column> {
         @Result(property="children", column="id",  many=@Many(select="com.eicas.cms.mapper.ColumnMapper.selectTreeByParentId", fetchType= FetchType.EAGER))
     })
     List<Column> selectTreeByParentId(Long id);
+
+
+
+    @Select(
+            "<script>" +
+                    "select id, column_id  from cms_article " +
+                    "where column_id=#{id}" +
+             "</script>"
+    )
+    List<Article> selectArticleByColumnId(Long id);
+
+
+    /**
+     查询子节点总数
+     */
+
+
+    @Select(
+            "<script>" +
+                    "select count(column_code)  from cms_column " +
+                    "where column_code like concat(#{columnCode, jdbcType=VARCHAR},'%')   and length(column_code)=#{sortOrder}" +
+                    "</script>"
+    )
+    int selectColumnCount(Map entity);
+
+
+
+
+
+
 
     /**
      *  条件查询栏目树
@@ -122,4 +157,17 @@ public interface ColumnMapper extends BaseMapper<Column> {
             "where parent_id = (select id from cms_column where code = #{code})"
     )
     List<Column> listByParentCode(String code);
+
+    /**
+     * 栏目移动
+     * */
+
+
+    @Select(
+            "update cms_column  set parent_id=#{parentId},column_code=#{columnCode} " +
+              " where id=#{id}"
+    )
+    int  MoveColumn(Map columnentity);
+
+
 }

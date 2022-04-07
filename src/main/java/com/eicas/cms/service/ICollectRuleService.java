@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.pojo.vo.CollectRuleVO;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * <p>
@@ -35,5 +38,14 @@ public interface ICollectRuleService extends IService<CollectRule> {
     * @return
     */
     boolean logicalDeleteById(Long id);
+
+    /**
+     * 查询所有自动采集的数据
+     * @param
+     * @return
+     */
+    void selectCollectRuleInit();
+
+    boolean updateByCollectId(Map flag);
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -78,6 +79,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
 
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         //对那些请求路径进行跨域处理
@@ -118,5 +120,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
+
+
 
 }

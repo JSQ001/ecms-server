@@ -99,4 +99,13 @@ public class CollectRule extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String columnName;
 
+
+    @TableField("is_flag")
+    private int  isFlag;
+
+    @TableField("collect_number")
+    private int collectNumber;
+
+
+
 }

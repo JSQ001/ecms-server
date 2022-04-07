@@ -1,14 +1,14 @@
-#本地测试环境
+#本地测试环境   7008
 server:
   port: 18989
 spring:
   datasource:
-    url: jdbc:p6spy:mysql://172.20.58.101:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
-    #    url: jdbc:mysql://localhost:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    #url: jdbc:p6spy:mysql://localhost:3306/ecms_servera?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/ecms_servera?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
     password: xxxxxx
-    driverClassName: com.p6spy.engine.spy.P6SpyDriver
-    #    driverClassName: com.mysql.cj.jdbc.Driver
+    #driverClassName: com.p6spy.engine.spy.P6SpyDriver
+    driverClassName: com.mysql.cj.jdbc.Driver
 
     #hikari数据库连接池
     hikari:
@@ -35,7 +35,11 @@ filePath:
   image: /home/eportal/ecms/img/
   imageMappingPath: /images/
   phantomjs: /usr/local/bin/phantomjs
+  loadPath: http://localhost:18989
 
+column:
+  columnId: 1511874398533210113
+  notyfyColumnId: 1511874625658945540
 swagger3:
   enable: true
 

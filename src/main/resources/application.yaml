@@ -3,5 +3,9 @@ spring:
     name: admin-server
   profiles:
     active: 101
+
 #    active: pro
 #    active: test
+server:
+  tomcat:
+    max-swallow-size: 102400

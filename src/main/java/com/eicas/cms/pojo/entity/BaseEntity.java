@@ -27,6 +27,11 @@ public class BaseEntity {
     @TableField(value = "created_by", fill = FieldFill.INSERT)
     private Long createdBy;
 
+
+
+
+
+
     @ApiModelProperty("更新人")
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private Long updatedBy;

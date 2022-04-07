@@ -1,19 +1,31 @@
 package com.eicas.cms.controller;
 
+import cn.hutool.core.util.ClassUtil;
 import com.eicas.cms.pojo.entity.Article;
-import com.eicas.cms.pojo.vo.ArticleAuditVO;
-import com.eicas.cms.pojo.vo.ArticleVO;
-import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
+import com.eicas.cms.pojo.vo.*;
 import com.eicas.cms.service.IArticleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ClassPathUtils;
+import org.apache.http.HttpRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,12 +39,20 @@ import java.util.List;
 @RequestMapping("/api/article")
 public class ArticleController {
 
+    @Value("${filePath.loadPath}")
+    private String loadPath;
+
     @Resource
     private IArticleService iArticleService;
 
     @ApiOperation(value = "文章信息表分页列表", response = Article.class)
     @GetMapping(value = "/list")
-    public Page<Article> listArticles(ArticleVO articleQueryVo) {
+    public Page<Article> listArticles( ArticleVO articleQueryVo) {
+        System.out.println("articleQueryVoParamDate="+articleQueryVo.getParamDateType());
+        System.out.println("articleQueryVo="+articleQueryVo.getParamDateNum());
+        articleQueryVo.setIsMajor(null);
+        articleQueryVo.setIsNotice(null);
+
         return iArticleService.listArticles(articleQueryVo);
     }
 
@@ -96,5 +116,42 @@ public class ArticleController {
     public Boolean modifyFocus(Long id, Boolean isFocus){
         return iArticleService.modifyFocus(id, isFocus);
     }
+
+
+    @ApiOperation(value = "文件上传")
+    @PostMapping("/fileLoad")
+    public String upload(HttpServletRequest request, @RequestParam("file")MultipartFile file) throws IOException{
+        String realPath=request.getSession().getServletContext().getRealPath("/uploadFile");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd");
+        String mk=sdf.format(new Date());
+
+        String path= ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+mk+"/";
+
+        File targetFile=new File(path);
+       if (!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+        FileOutputStream bos=null;
+        try {
+
+            String str=targetFile+"\\"+file.getOriginalFilename();
+             bos=new FileOutputStream(str);
+             bos.write(file.getBytes());
+
+            return loadPath+"/static/"+mk+"/"+file.getOriginalFilename();
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+            return "";
+        }finally {
+
+            bos.flush();
+            bos.close();
+
+        }
+
+
+    }
+
+
 
 }
