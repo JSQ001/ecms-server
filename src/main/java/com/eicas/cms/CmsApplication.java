@@ -13,7 +13,6 @@ import javax.servlet.MultipartConfigElement;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableSwagger2
 @MapperScan("com.eicas.cms.mapper")
 public class CmsApplication {
 

@@ -3,10 +3,8 @@ package com.eicas.cms.service;
 import com.eicas.cms.pojo.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.eicas.cms.pojo.vo.ArticleAuditVO;
-import com.eicas.cms.pojo.vo.ArticleDateVo;
-import com.eicas.cms.pojo.vo.ArticleVO;
-import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
+import com.eicas.cms.pojo.vo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,13 +55,13 @@ public interface IArticleService extends IService<Article> {
     * 查询文章统计信息
     * @return
     */
-    ArticleStatisticalResults getStatistics(LocalDateTime startTime, LocalDateTime endTime);
+    Map getStatistics(String monthTime,LocalDateTime startTime, LocalDateTime endTime);
 
     /**
     * 按照栏目统计文章信息
     * @return
     */
-    List<ArticleStatisticalResults> getStatisticByColumn(String code, LocalDateTime startTime, LocalDateTime endTime);    /**
+    List<StatisticalResults> getStatisticByColumn(String columnId, LocalDateTime startTime, LocalDateTime endTime);    /**
 
      * 批量更新文章
     * @return
@@ -79,6 +77,45 @@ public interface IArticleService extends IService<Article> {
     *自动采集重复查询
     * */
     int listCount(Map paramMap);
+
+    /**文章点击次数*/
+    int articlePoint(long id);
+
+
+    /**
+     * 用户发表文章统计
+     */
+    Map statisticsByUser(Map parmaMap);
+
+
+    /**
+     * 统计自动采集节点发布信息
+     * */
+    List<StatisticalResults> statisticsByPointName(Map parmaMap);
+
+
+
+    /**
+     * 统计某栏目的发布信息
+     * */
+    List<Article> statisticByColumnArticle(@Param("state") String state, @Param("columnId")String columnId, @Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+
+
+    /**
+     * 统计某时间段栏目发布信息浏览总量
+     * */
+
+   Map statisticsByHitNumsCount(Map parmaMap);
+
+
+
+
+    /**
+     * 某栏目总浏览量前8
+     *
+     * */
+    List<StatisticalResults> statisticsByHitNumsCountBefore(Map parmaMap);
+
 
 
 

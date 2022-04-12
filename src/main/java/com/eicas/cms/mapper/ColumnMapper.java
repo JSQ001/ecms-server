@@ -161,12 +161,9 @@ public interface ColumnMapper extends BaseMapper<Column> {
     /**
      * 栏目移动
      * */
-
-
-    @Select(
-            "update cms_column  set parent_id=#{parentId},column_code=#{columnCode} " +
-              " where id=#{id}"
-    )
+    @Update("<script>" +
+            "update cms_column  set parent_id=#{parentId},column_code=#{columnCode}  where id=#{id}" +
+            "</script>")
     int  MoveColumn(Map columnentity);
 
 
