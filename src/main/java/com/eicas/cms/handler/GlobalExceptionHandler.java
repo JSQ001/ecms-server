@@ -5,7 +5,8 @@ import com.eicas.cms.component.BaseResponse;
 import com.eicas.cms.exception.BusinessException;
 import com.eicas.cms.pojo.enumeration.ResultCode;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+
+import com.mysql.jdbc.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;

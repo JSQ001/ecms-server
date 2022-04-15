@@ -12,7 +12,7 @@ import com.eicas.cms.service.IColumnService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+//import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
