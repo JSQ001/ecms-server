@@ -33,7 +33,7 @@ public class UploadFileUtil {
         FileOutputStream bos = null;
         try {
 
-            String str = targetFile + "\\" + file.getOriginalFilename();
+            String str = targetFile + "/" + file.getOriginalFilename();
 
              bos = new FileOutputStream(str);
              bos.write(file.getBytes());
