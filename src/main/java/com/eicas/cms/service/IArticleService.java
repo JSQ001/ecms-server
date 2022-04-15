@@ -118,5 +118,9 @@ public interface IArticleService extends IService<Article> {
 
 
 
+    Page<Article> listArticlesInfor(ArticleVO articleVO);
+
+
+
 
 }

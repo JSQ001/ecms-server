@@ -25,7 +25,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * */
     @Select("<script>" +
             "select a.id,a.column_id,c.name as columnName, title, sub_title, a.sort_order, a.keyword, a.content, a.essential, a.is_top, a.is_major,a.publish_time," +
-                    "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums " +
+                    "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums,a.is_major,a.is_notice " +
             "from cms_article as a " +
             "left join cms_column as c on c.id = a.column_id " +
             "<where>" +
@@ -70,7 +70,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     @Select("<script>" +
             "select a.id,a.column_id,a.column_code,a.column_name, a.title, a.sub_title, a.sort_order, a.keyword, a.content, a.essential, a.is_top, a.is_major,a.publish_time," +
-            "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums " +
+            "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums,a.is_notice " +
             "from cms_article as a " +
             "<where>" +
             "   a.is_deleted = 0" +
@@ -87,6 +87,10 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "<when test='param.columnCode != null and param.columnCode!=\"\" '>" +
             "   and a.column_code like concat(#{param.columnCode, jdbcType=VARCHAR},'%')" +
             "</when>" +
+            "<when test='param.columnId != null and param.columnId !=\"\"'>" +
+            "   and a.column_id=#{param.columnId}" +
+            "</when>" +
+
             "<when test='param.isMajor != null and param.isMajor !=\"\"'>" +
             "   and is_major=#{param.isMajor}" +
             "</when>" +
@@ -123,6 +127,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "<when test='param.paramDateType != null and param.paramDateType ==4' >" +
             "   and TIMESTAMPDIFF(YEAR,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;=#{param.paramDateNum}" +
             "</when>" +
+            "<if test='param.yearMonth != null and param.yearMonth !=\"\"'>" +
+            "   and date_format(a.publish_time,'%Y-%m')= #{param.yearMonth}" +
+            "</if>  " +
             "</where>" +
             " ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
             "</script>")
@@ -366,6 +373,26 @@ public interface ArticleMapper extends BaseMapper<Article> {
     )
     StatisticalResults statisticsByHitNumsCountEveryDay(String dateNum);
 
+
+    @Select("<script>" +
+            "select a.id,a.column_id,a.column_code,a.column_name, a.title, a.sub_title, a.sort_order, a.keyword, a.content, a.essential, a.is_top, a.is_major,a.publish_time," +
+            "a.cover_img_url, a.link_url, a.type, a.author, a.source, a.state, a.is_show, a.is_focus, a.is_recommended,a.hit_nums " +
+            "from cms_article as a " +
+            "<where>" +
+            "   a.is_deleted = 0  and a.is_major  is null  and  a.is_notice is null" +
+            "<when test='articleVO.columnCode != null and articleVO.columnCode!=\"\" '>" +
+            "   and a.column_code like concat(#{articleVO.columnCode},'%')" +
+            "</when>" +
+            "<if test='articleVO.isFocus != null and articleVO.isFocus !=\"\"'>" +
+            "   and a.is_focus = #{articleVO.isFocus}" +
+            "</if>  " +
+            "<if test='articleVO.state != null and articleVO.state!=\"\"'>" +
+            "           and a.state = #{articleVO.state} " +
+            "</if> " +
+            "</where>" +
+            "  ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
+            "</script>")
+    Page<Article> listArticlesInfor(ArticleVO articleVO, Page page);
 
 
 

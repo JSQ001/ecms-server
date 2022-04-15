@@ -45,7 +45,7 @@ public class NotifyController {
 
         article.setColumnId(this.columnId);
         article.setState(entity.getState());
-        article.setIsNotice(true);
+        article.setIsNotice(Boolean.TRUE);
 
         return iArticleService.createOrUpdate(article);
     }
@@ -60,6 +60,10 @@ public class NotifyController {
         articleVO.setStartTime(entity.getStartTime());
         articleVO.setEndTime(entity.getEndTime());
         articleVO.setIsNotice(Boolean.TRUE);
+        articleVO.setState(entity.getState());
+        articleVO.setCurrent(entity.getCurrent());
+        articleVO.setSize(entity.getSize());
+
         return iArticleService.listArticles(articleVO);
     }
 

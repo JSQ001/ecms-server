@@ -59,18 +59,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public Page<Article> listArticles(ArticleVO articleQueryVo) {
-      /*  List<Long> ids = null;
-        if(articleQueryVo.getColumnId() != null){
-            ids = columnService.listIdsByParentId(articleQueryVo.getColumnId());
-        }
-        return articleMapper.listArticles(ids,articleQueryVo, articleQueryVo.pageFactory());  */
-
 
         return articleMapper.listArticlesA(articleQueryVo, articleQueryVo.pageFactory());
 
 
 
     }
+
+
 
     /**
     * 保存或更新
@@ -439,6 +435,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         return  articleMapper.statisticsByHitNumsCountBefore(parmaMap);
 
+    }
+
+
+    @Override
+    public  Page<Article> listArticlesInfor(ArticleVO articleVO){
+
+        return   articleMapper.listArticlesInfor(articleVO, articleVO.pageFactory());
     }
 
 

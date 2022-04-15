@@ -1,9 +1,7 @@
 package com.eicas.cms.config;
 
-import com.eicas.cms.component.ClientAuthenticate;
 import com.eicas.cms.interceptor.FormatContentTypeInterceptor;
 import com.eicas.cms.interceptor.IsLoginInterceptor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -19,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,8 +32,8 @@ public class WebAppConfig implements WebMvcConfigurer {
     private String imageMappingPath;
 
     /**
-    * get请求，时间类型转换
-    * */
+     * get请求，时间类型转换
+     */
     @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
     private String localDateTimePattern;
 
@@ -50,35 +47,18 @@ public class WebAppConfig implements WebMvcConfigurer {
          *
          */
         registry.addResourceHandler(imageMappingPath + "/**")
-                .addResourceLocations("file:" + imagePath);
-
-        // 配置swagger静态资源映射
-//        registry.addResourceHandler("/swagger-ui/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/");
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-
+                .addResourceLocations("file:///" + imagePath);
     }
 
-
-    // SpringMVC 需要手动添加拦截器
+    /**
+     *  SpringMVC 需要手动添加拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册自定义拦截器
         registry.addInterceptor(isLoginInterceptor);
         registry.addInterceptor(new FormatContentTypeInterceptor());
-        //  .addPathPatterns("")
-        //  .excludePathPatterns()
         WebMvcConfigurer.super.addInterceptors(registry);
-
-        /// 配置swagger拦截器
-//        registry.addInterceptor(new SwaggerInterceptor())
-//                .addPathPatterns("/**").
-//                excludePathPatterns("/swagger-resources/**", "/webjars/**", "/swagger-ui/**", "/v3/**");
-//
     }
-
-
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -91,7 +71,6 @@ public class WebAppConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 //探测请求有效时间，单位秒
                 .maxAge(1800);
-
     }
 
     /**
@@ -120,7 +99,5 @@ public class WebAppConfig implements WebMvcConfigurer {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
-
-
 
 }

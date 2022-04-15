@@ -6,7 +6,7 @@ import com.eicas.cms.pojo.entity.Article;
 import com.eicas.cms.pojo.vo.ArticleVO;
 import com.eicas.cms.pojo.vo.MemorbiliaVo;
 import com.eicas.cms.service.IArticleService;
-import com.sun.xml.internal.ws.api.pipe.Tube;
+//import com.sun.xml.internal.ws.api.pipe.Tube;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -63,6 +63,9 @@ public class MemorbiliaController {
         articleVO.setStartTime(entity.getStartTime());
         articleVO.setEndTime(entity.getEndTime());
         articleVO.setIsMajor(Boolean.TRUE);
+        articleVO.setYearMonth(entity.getYearMonth());
+        articleVO.setCurrent(entity.getCurrent());
+        articleVO.setSize(entity.getSize());
 
         return iArticleService.listArticles(articleVO);
     }

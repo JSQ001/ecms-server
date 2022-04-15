@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class NotifyVo {
+public class NotifyVo extends BaseVO{
 
     @ApiModelProperty("公告id")
     private Long id;

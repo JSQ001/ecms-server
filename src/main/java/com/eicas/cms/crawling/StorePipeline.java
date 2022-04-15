@@ -59,7 +59,8 @@ public class StorePipeline implements Pipeline {
 
         try{
             DateTime publishTime = DateUtil.parse(resultItems.get("publishTime"));
-            article.setPublishTime(publishTime.toLocalDateTime());
+            //article.setPublishTime(publishTime.toLocalDateTime());
+            article.setPublishTime(publishTime.toTimestamp().toLocalDateTime());
         }catch (Exception e){
             log.error("发布时间规则错误"+e.getMessage());
         }

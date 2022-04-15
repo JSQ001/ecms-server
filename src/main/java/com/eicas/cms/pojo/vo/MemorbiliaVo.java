@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class MemorbiliaVo {
+public class MemorbiliaVo extends BaseVO{
 
     @ApiModelProperty("大事件id")
     private Long id;
@@ -38,6 +38,9 @@ public class MemorbiliaVo {
 
     @ApiModelProperty("结束时间")
     private LocalDateTime endTime;
+
+    @ApiModelProperty("时间年月2020-04")
+    private String yearMonth;
 
 
 }
