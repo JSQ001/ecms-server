@@ -1,24 +1,24 @@
 package com.eicas.cms.controller;
 
-import cn.hutool.core.util.ClassUtil;
-import com.eicas.cms.pojo.entity.Article;
-import com.eicas.cms.pojo.vo.*;
-import com.eicas.cms.service.IArticleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eicas.cms.pojo.entity.Article;
+import com.eicas.cms.pojo.vo.ArticleAuditVO;
+import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
+import com.eicas.cms.pojo.vo.ArticleVO;
+import com.eicas.cms.pojo.vo.StatisticalResults;
+import com.eicas.cms.service.IArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.ClassPathUtils;
-import org.apache.http.HttpRequest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -42,46 +44,62 @@ public class ArticleController {
     @Value("${filePath.loadPath}")
     private String loadPath;
 
+
+    @Value("${filePath.image}")
+    private  String imagePath;
+
+
     @Resource
     private IArticleService iArticleService;
 
     @ApiOperation(value = "文章信息表分页列表", response = Article.class)
     @GetMapping(value = "/list")
     public Page<Article> listArticles( ArticleVO articleQueryVo) {
-        System.out.println("articleQueryVoParamDate="+articleQueryVo.getParamDateType());
-        System.out.println("articleQueryVo="+articleQueryVo.getParamDateNum());
         articleQueryVo.setIsMajor(null);
         articleQueryVo.setIsNotice(null);
-
         return iArticleService.listArticles(articleQueryVo);
     }
 
-    @ApiOperation(value = "根据id查询文章信息", response = Article.class)
+    @ApiOperation(value = "根据栏目columnecode查询文章信息表分页列表", response = Article.class)
+    @GetMapping(value = "/listinfor")
+    public  Page<Article> listArticlesInfor(ArticleVO articleVO){
+
+        return iArticleService.listArticlesInfor(articleVO);
+
+    }
+
+    @ApiOperation(value = "根据id查询文章信息", response = ArticleStatisticalResults.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "文章id",required = true,  dataTypeClass = Long.class)})
     @GetMapping(value = "/query")
     public Article queryArticleById(Long id) {
+        iArticleService.articlePoint(id);
         return iArticleService.getById(id);
     }
 
+    //统计文章各状态总数
     @ApiOperation(value = "统计全部文章信息", response = Article.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
             @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
     })
     @GetMapping(value = "/statistics")
-    public ArticleStatisticalResults getStatistics(LocalDateTime startTime, LocalDateTime endTime) {
-         return iArticleService.getStatistics(startTime, endTime);
+    public Map getStatistics(LocalDateTime startTime, LocalDateTime endTime) {
+        String month="";
+        return iArticleService.getStatistics(month,startTime, endTime);
     }
 
-    @ApiOperation(value = "统计指定栏目的子栏目文章信息", response = Article.class)
+
+
+    //根据栏目，时间查询发布信息
+    @ApiOperation(value = "统计指定栏目的子栏目文章信息", response = ArticleStatisticalResults.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "code", value = "栏目code", required = true, dataTypeClass = String.class),
+            @ApiImplicitParam(name = "columnId", value = "栏目columnId", required = true, dataTypeClass = String.class),
             @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
             @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
     })
-    @GetMapping(value = "/statisticsByColumn")
-    public List<ArticleStatisticalResults> getStatisticByColumn(String code,LocalDateTime startTime, LocalDateTime endTime) {
-        return iArticleService.getStatisticByColumn(code, startTime, endTime);
+    @GetMapping(value = "/getStatisticsByColumn")
+    public List<StatisticalResults> getStatisticByColumn(String columnId,LocalDateTime startTime, LocalDateTime endTime) {
+        return iArticleService.getStatisticByColumn(columnId,startTime, endTime);
     }
 
     @ApiOperation(value = "文章信息表新增/修改")
@@ -125,8 +143,8 @@ public class ArticleController {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd");
         String mk=sdf.format(new Date());
 
-        String path= ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+mk+"/";
-
+        String path= imagePath+mk+"/";//'ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+mk+"/";
+          System.out.println("path="+path);
         File targetFile=new File(path);
        if (!targetFile.exists()){
             targetFile.mkdirs();
@@ -138,19 +156,111 @@ public class ArticleController {
              bos=new FileOutputStream(str);
              bos.write(file.getBytes());
 
-            return loadPath+"/static/"+mk+"/"+file.getOriginalFilename();
+            return loadPath+mk+"/"+file.getOriginalFilename();
         }catch (FileNotFoundException e){
             e.printStackTrace();
             return "";
         }finally {
-
             bos.flush();
             bos.close();
-
         }
-
-
     }
+
+    @ApiOperation(value = "文章点击")
+    @PostMapping("/point")
+    public int articlePoint(@RequestParam("id") long id) {
+           return iArticleService.articlePoint(id);
+    }
+
+
+    /**
+     * 用户发表文章统计
+     */
+    @ApiOperation(value = "用户发表文章统计", response = ArticleStatisticalResults.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "createdBy", value = "用户id", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
+    })
+    @GetMapping(value = "/statisticsByUser")
+    public Map getStatisticByUser(String id,LocalDateTime startTime, LocalDateTime endTime) {
+        return iArticleService.statisticsByUser(null);
+    }
+
+    /**
+     * 统计自动采集节点发布信息
+     * */
+    @ApiOperation(value = "用户发表文章统计", response = ArticleStatisticalResults.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pointName", value = "节点名称", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
+    })
+    @GetMapping(value = "/getStatisticsByPointName")
+    public List<StatisticalResults> getStatisticsByPointName(String pointName,LocalDateTime startTime, LocalDateTime endTime) {
+        Map<String,Object> userMap= new HashMap<>();
+        userMap.put("pointName",pointName);
+        userMap.put("startTime",startTime);
+        userMap.put("endTime",endTime);
+        return iArticleService.statisticsByPointName(userMap);
+    }
+
+
+
+    /**
+     * 根据栏目，状态查询发布信息
+     * */
+    @ApiOperation(value = "根据栏目，状态查询发布信息", response = Article.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "state", value = "发布状态", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "columnId", value = "栏目if", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
+    })
+    @GetMapping(value = "/getStatisticByColumnArticle")
+    List<Article> statisticByColumnArticle(@Param("state") String state, @Param("columnId")String columnId, @Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime) {
+        return  iArticleService.statisticByColumnArticle(state,columnId,startTime,endTime);
+    }
+
+
+
+
+    @ApiOperation(value = "栏目浏览总量", response = Article.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "columnId", value = "栏目if", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
+    })
+    @GetMapping(value = "/getStatisticsByHitNumsCount")
+    Map statisticsByHitNumsCount( @Param("columnId")String columnId, @Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime) {
+        Map<String,Object> HitNumsMap= new HashMap<>();
+        HitNumsMap.put("columnId",columnId);
+        HitNumsMap.put("startTime",startTime);
+        HitNumsMap.put("endTime",endTime);
+
+        return  iArticleService.statisticsByHitNumsCount(HitNumsMap);
+    }
+
+
+    //============================================
+
+    @ApiOperation(value = "栏目浏览总量前8", response = Article.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "columnId", value = "栏目if", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "startTime", value = "开始时间", dataTypeClass = LocalDateTime.class),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", dataTypeClass = LocalDateTime.class)
+    })
+    @GetMapping(value = "/getstatisticsByHitNumsCountBefore")
+    List<StatisticalResults> statisticsByHitNumsCountBefore( @Param("columnId")String columnId, @Param("startTime")LocalDateTime startTime, @Param("endTime") LocalDateTime endTime) {
+        Map<String,Object> HitNumsMap= new HashMap<>();
+        HitNumsMap.put("columnId",columnId);
+        HitNumsMap.put("startTime",startTime);
+        HitNumsMap.put("endTime",endTime);
+
+        return  iArticleService.statisticsByHitNumsCountBefore(HitNumsMap);
+    }
+
+
 
 
 

@@ -104,7 +104,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty("是否推荐")
     @TableField("is_recommended")
-    private Boolean recommended;
+    private Boolean isRecommended;
 
     @ApiModelProperty("是否置顶")
     @TableField("is_top")
@@ -148,6 +148,10 @@ public class Article extends BaseEntity implements Serializable {
 
     @TableField("column_name")
     private String columnName;
+
+    @ApiModelProperty("创建人名称")
+    @TableField("created_name")
+    private String createdName;
 
 
 }

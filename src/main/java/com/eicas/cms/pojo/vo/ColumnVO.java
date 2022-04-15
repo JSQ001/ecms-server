@@ -20,4 +20,8 @@ public class ColumnVO extends BaseVO {
     @ApiModelProperty("结束时间")
     private LocalDateTime endTime;
 
+    @ApiModelProperty("栏目code")
+    private  String  columnCode;
+
+
 }

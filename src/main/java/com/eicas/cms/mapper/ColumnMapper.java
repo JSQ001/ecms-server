@@ -26,7 +26,7 @@ public interface ColumnMapper extends BaseMapper<Column> {
      */
     @Select(
         "<script>" +
-            "select id, code, parent_id, name, type, path, publish_time, sort_order, keyword, " +
+            "select id, code,column_code ,parent_id, name, type, path, publish_time, sort_order, keyword, " +
             "custom_url, description from cms_column " +
             "where id in (" +
                 "select distinct getRootId(id) from cms_column" +
@@ -152,7 +152,7 @@ public interface ColumnMapper extends BaseMapper<Column> {
      * 根据父栏目code查询子栏目
      * */
     @Select(
-            "select id, code, name, parent_id as parentId " +
+            "select id, code, column_code,name, parent_id as parentId " +
             "from cms_column " +
             "where parent_id = (select id from cms_column where code = #{code})"
     )
@@ -161,13 +161,29 @@ public interface ColumnMapper extends BaseMapper<Column> {
     /**
      * 栏目移动
      * */
-
-
-    @Select(
-            "update cms_column  set parent_id=#{parentId},column_code=#{columnCode} " +
-              " where id=#{id}"
-    )
+    @Update("<script>" +
+            "update cms_column  set parent_id=#{parentId},column_code=#{columnCode}  where id=#{id}" +
+            "</script>")
     int  MoveColumn(Map columnentity);
+
+
+    /***
+     *门户资讯栏目
+     */
+    @Select(
+            "<script>" +
+                    "select id, code, parent_id, name, type, path,column_code, publish_time, sort_order, keyword, " +
+                    "custom_url, description from cms_column " +
+                    "<where> " +
+                    "       and is_deleted = 0  and publish_time  is not null " +
+                    "<when test='entity.columnCode != null and entity.columnCode!=\"\" '>" +
+                    "   and column_code like concat(#{entity.columnCode, jdbcType=VARCHAR},'%')" +
+                    "</when>" +
+                    "</where>" +
+                    "</script>"
+    )
+    Page<Column> getTreePageInfor(ColumnVO entity, Page page);
+
 
 
 }

@@ -189,4 +189,14 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
 
     }
 
+    /***
+     *门户资讯栏目
+     */
+    @Override
+    public  Page<Column> getTreePageInfor(ColumnVO entity){
+         return  columnMapper.getTreePageInfor(entity,entity.pageFactory());
+
+    }
+
+
 }

@@ -28,13 +28,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class WebDriverPool {
 
     private final static int DEFAULT_CAPACITY = 5;
-
     private final int capacity;
-
     private final static int STAT_RUNNING = 1;
-
     private final static int STAT_CLODED = 2;
-
     private AtomicInteger stat = new AtomicInteger(STAT_RUNNING);
 
     /*

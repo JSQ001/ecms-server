@@ -69,4 +69,10 @@ public interface IColumnService extends IService<Column> {
     int MoveColumn(Map columnentity);
 
 
+    /***
+     *门户资讯栏目
+     */
+    Page<Column> getTreePageInfor(ColumnVO entity);
+
+
 }

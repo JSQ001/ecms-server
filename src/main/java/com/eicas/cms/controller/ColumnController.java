@@ -96,5 +96,13 @@ public class ColumnController {
     }
 
 
+    @GetMapping("/getcolumneInfor")
+    public Page<Column> getTreePageInfor(ColumnVO entity){
+
+       return  iColumnService.getTreePageInfor(entity);
+
+
+    }
+
 
 }
