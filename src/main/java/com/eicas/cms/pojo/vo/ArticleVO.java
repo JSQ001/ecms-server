@@ -52,5 +52,12 @@ public class ArticleVO extends BaseVO implements Serializable {
     @ApiModelProperty("时间年月2020-04")
     private String yearMonth;
 
+    @ApiModelProperty("年2020")
+    private  String year;
+
+    @ApiModelProperty("月02")
+    private String month;
+
+
 
 }

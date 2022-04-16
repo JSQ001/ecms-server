@@ -62,7 +62,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "   and a.title like concat('%',#{param.title, jdbcType=VARCHAR},'%')" +
             "</when>" +
             "</where>" +
-            " ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
+            " ORDER BY  a.publish_time desc, a.updated_time desc" +
             "</script>")
     Page<Article> listArticles(@Param("ids") List<Long> ids, @Param("param") ArticleVO param, Page page);
 
@@ -130,8 +130,14 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "<if test='param.yearMonth != null and param.yearMonth !=\"\"'>" +
             "   and date_format(a.publish_time,'%Y-%m')= #{param.yearMonth}" +
             "</if>  " +
+            "<if test='param.year != null and param.year !=\"\"'>" +
+            "   and date_format(a.publish_time,'%Y')= #{param.year}" +
+            "</if>  " +
+            "<if test='param.month != null and param.month !=\"\"'>" +
+            "   and date_format(a.publish_time,'%m')= #{param.month}" +
+            "</if>  " +
             "</where>" +
-            " ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
+            " ORDER BY a.publish_time desc, a.updated_time desc ,a.sort_order desc" +
             "</script>")
     Page<Article> listArticlesA(@Param("param") ArticleVO param, Page page);
 

@@ -66,7 +66,8 @@ public class MemorbiliaController {
         articleVO.setYearMonth(entity.getYearMonth());
         articleVO.setCurrent(entity.getCurrent());
         articleVO.setSize(entity.getSize());
-
+        articleVO.setMonth(entity.getMonth());
+        articleVO.setYear(entity.getYear());
         return iArticleService.listArticles(articleVO);
     }
 

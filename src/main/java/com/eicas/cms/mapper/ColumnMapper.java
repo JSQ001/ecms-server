@@ -85,7 +85,7 @@ public interface ColumnMapper extends BaseMapper<Column> {
     @Select(
             "<script>" +
                     "select id, column_id  from cms_article " +
-                    "where column_id=#{id}" +
+                    "where  column_id=#{id}" +
              "</script>"
     )
     List<Article> selectArticleByColumnId(Long id);
@@ -99,7 +99,7 @@ public interface ColumnMapper extends BaseMapper<Column> {
     @Select(
             "<script>" +
                     "select count(column_code)  from cms_column " +
-                    "where column_code like concat(#{columnCode, jdbcType=VARCHAR},'%')   and length(column_code)=#{sortOrder}" +
+                    "where is_deleted=0 and  column_code like concat(#{columnCode, jdbcType=VARCHAR},'%')   and length(column_code)=#{sortOrder}" +
                     "</script>"
     )
     int selectColumnCount(Map entity);
@@ -165,6 +165,15 @@ public interface ColumnMapper extends BaseMapper<Column> {
             "update cms_column  set parent_id=#{parentId},column_code=#{columnCode}  where id=#{id}" +
             "</script>")
     int  MoveColumn(Map columnentity);
+
+    /**
+     * 更新文章栏目columnCode
+     * */
+    @Update("<script>" +
+            "update cms_article  set column_code=#{columnCode}  where column_id=#{columnId}" +
+            "</script>")
+    int UpdateArticleColumnCode(Map columnencode);
+
 
 
     /***

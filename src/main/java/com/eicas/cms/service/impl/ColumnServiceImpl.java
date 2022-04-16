@@ -87,6 +87,7 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
 
         columnMap.put("sortOrder",len);
         int count=columnMapper.selectColumnCount(columnMap);
+        System.out.println("countcount="+count);
         if (count>0){
             return false;
 
@@ -173,12 +174,23 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
             }
 
 
+
             Map<String, Object> moveColumnMap = new HashMap<>();
             moveColumnMap.put("parentId", (Long) columnentity.get("targertid"));
             moveColumnMap.put("columnCode", columnlen);
             moveColumnMap.put("id", columnentity.get("sourceid"));
 
+            if (columnMapper.selectArticleByColumnId((Long) columnentity.get("sourceid")).size()>0 ){
+                 Map<String, Object> columnenCodeMap = new HashMap<>();
+
+                 columnenCodeMap.put("columnCode",columnlen);
+                 columnenCodeMap.put("columnId",columnentity.get("sourceid"));
+
+                 columnMapper.UpdateArticleColumnCode(columnenCodeMap);
+            }
+
             return columnMapper.MoveColumn(moveColumnMap);
+
 
         } catch (Exception e) {
             e.printStackTrace();
