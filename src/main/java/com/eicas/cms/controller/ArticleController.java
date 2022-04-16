@@ -25,10 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -151,12 +148,15 @@ public class ArticleController {
         }
         FileOutputStream bos=null;
         try {
+            UUID uuid=UUID.randomUUID();
+            String filename=uuid.toString().replace("-","");
 
-            String str=targetFile+"/"+file.getOriginalFilename();
+            String str=targetFile+"/"+filename+"."+file.getContentType().substring(6);
+
              bos=new FileOutputStream(str);
              bos.write(file.getBytes());
 
-            return loadPath+mk+"/"+file.getOriginalFilename();
+            return loadPath+mk+"/"+filename+"."+file.getContentType().substring(6);
         }catch (FileNotFoundException e){
             e.printStackTrace();
             return "";

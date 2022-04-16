@@ -119,13 +119,13 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "   and TIMESTAMPDIFF(day,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;=#{param.paramDateNum}" +
             "</when>" +
             "<when test='param.paramDateType != null and param.paramDateType ==2' >" +
-            "   and TIMESTAMPDIFF(WEEK,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;=#{param.paramDateNum}" +
+            "   and TIMESTAMPDIFF(WEEK,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;#{param.paramDateNum}" +
             "</when>" +
             "<when test='param.paramDateType != null and param.paramDateType == 3' >" +
-            "   and TIMESTAMPDIFF(MONTH,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;=#{param.paramDateNum}" +
+            "   and TIMESTAMPDIFF(MONTH,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;#{param.paramDateNum}" +
             "</when>" +
             "<when test='param.paramDateType != null and param.paramDateType ==4' >" +
-            "   and TIMESTAMPDIFF(YEAR,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;=#{param.paramDateNum}" +
+            "   and TIMESTAMPDIFF(YEAR,date_format(publish_time,'%Y-%m-%d'),date_format(NOW(),'%Y-%m-%d'))&lt;#{param.paramDateNum}" +
             "</when>" +
             "<if test='param.yearMonth != null and param.yearMonth !=\"\"'>" +
             "   and date_format(a.publish_time,'%Y-%m')= #{param.yearMonth}" +

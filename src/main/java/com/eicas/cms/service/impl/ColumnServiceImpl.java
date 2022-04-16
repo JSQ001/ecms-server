@@ -100,6 +100,12 @@ public class ColumnServiceImpl extends ServiceImpl<ColumnMapper, Column> impleme
 
     @Override
     public boolean createOrUpdate(Column entity) {
+
+        List<Column> columnList=columnMapper.listByCode(entity.getCode());
+        if (columnList.size()>0){
+            return  false;
+        }
+
         Map<String,Object>  columnMap= new HashMap<>();
         int len=entity.getColumnCode().length()+2;
         columnMap.put("columnCode",entity.getColumnCode());

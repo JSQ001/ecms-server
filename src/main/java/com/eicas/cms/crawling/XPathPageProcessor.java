@@ -32,8 +32,9 @@ public class XPathPageProcessor implements PageProcessor {
     //websocketSessionId
     private String sessionId;
 
-    @Override
     // process是定制爬虫逻辑的核心接口，在这里编写抽取逻辑
+
+    @Override
     public void process(Page page) {
         try{
             // 部分二：定义如何抽取页面信息，并保存下来
@@ -47,6 +48,14 @@ public class XPathPageProcessor implements PageProcessor {
             }
 
             if(StringUtils.hasText(collectRule.getEssentialRule())){
+                //page.getHtml().xpath(collectRule.getContentRule()).toString()
+                if (page.getHtml().xpath(collectRule.getEssentialRule()).toString().equals("")){
+                    String temp=page.getHtml().xpath(collectRule.getContentRule()).toString().substring(0,100);
+
+                    temp=temp.replace(temp,"/<[^>]+/g,");
+                    page.putField("essential", temp);
+                }
+                else
                 page.putField("essential", page.getHtml().xpath(collectRule.getEssentialRule()).toString());
             }
             if(StringUtils.hasText(collectRule.getAuthorRule())){

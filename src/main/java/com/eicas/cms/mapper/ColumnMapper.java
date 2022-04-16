@@ -194,5 +194,15 @@ public interface ColumnMapper extends BaseMapper<Column> {
     Page<Column> getTreePageInfor(ColumnVO entity, Page page);
 
 
+    /**
+     * 根据栏目code栏目
+     * */
+    @Select(
+            "select id, code  " +
+                    "from cms_column " +
+                    "where  is_deleted = 0 and code = #{code}"
+    )
+    List<Column> listByCode(String code);
+
 
 }

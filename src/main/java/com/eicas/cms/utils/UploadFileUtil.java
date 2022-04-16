@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 public class UploadFileUtil {
 
@@ -33,15 +34,20 @@ public class UploadFileUtil {
         FileOutputStream bos = null;
         try {
 
-            String str = targetFile + "/" + file.getOriginalFilename();
 
-             bos = new FileOutputStream(str);
+            UUID uuid=UUID.randomUUID();
+            String filename=uuid.toString().replace("-","");
+
+            String str=targetFile+"/"+filename+"."+file.getContentType().substring(6);
+
+
+            bos = new FileOutputStream(str);
              bos.write(file.getBytes());
 
-            uploadImageRrsult.setUrl(loadPath+mk + "/" + file.getOriginalFilename());
-            uploadImageRrsult.setTitle(file.getOriginalFilename());
+            uploadImageRrsult.setUrl(loadPath+mk + "/" + filename+"."+file.getContentType().substring(6));
+            uploadImageRrsult.setTitle(filename+"."+file.getContentType().substring(6));
             uploadImageRrsult.setState("SUCCESS");
-            uploadImageRrsult.setOrginal(file.getOriginalFilename());
+            uploadImageRrsult.setOrginal(filename+"."+file.getContentType().substring(6));
             return  uploadImageRrsult;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
