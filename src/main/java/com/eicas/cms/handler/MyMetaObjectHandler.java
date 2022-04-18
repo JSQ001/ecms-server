@@ -19,9 +19,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.fillStrategy(metaObject, "publishTime", LocalDateTime.now());
         this.fillStrategy(metaObject, "createdBy",1L);
         this.fillStrategy(metaObject, "updatedBy",1L);
-        this.fillStrategy(metaObject, "password","123456");
         this.fillStrategy(metaObject, "deleted",false);
-        this.fillStrategy(metaObject, "status",0);
         System.out.println(metaObject.getObjectWrapper());
     }
 

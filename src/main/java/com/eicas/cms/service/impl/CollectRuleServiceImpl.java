@@ -1,18 +1,20 @@
 package com.eicas.cms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eicas.cms.component.ScheduleTask;
-import com.eicas.cms.crawling.Craw;
-import com.eicas.cms.pojo.entity.CollectRule;
+import com.eicas.cms.crawler.ArticleSpider;
 import com.eicas.cms.mapper.CollectRuleMapper;
+import com.eicas.cms.pojo.entity.CollectRule;
 import com.eicas.cms.pojo.vo.CollectRuleVO;
 import com.eicas.cms.service.ICollectRuleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
-import java.io.Serializable;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +40,7 @@ public class CollectRuleServiceImpl extends ServiceImpl<CollectRuleMapper, Colle
 
 
     @Resource
-    private Craw craw;
+    private ArticleSpider articleSpider;
 
 
     @Override
@@ -74,24 +76,33 @@ public class CollectRuleServiceImpl extends ServiceImpl<CollectRuleMapper, Colle
     public  boolean  updateByCollectId(Map paramap){
           try {
 
-              CollectRule collectRule=this.getById((Long)paramap.get("id"));
+              CollectRule collectRule = this.getById((Long) paramap.get("id"));
 
 
-              if ((int)paramap.get("isFlag")==1)
-              {   log.info("手动开始爬取---" + collectRule.getId() + "---" + collectRule.getName());
-                  craw.run(collectRule,null);
-                  log.info("手动爬取结束---" + collectRule.getId() + "---" + collectRule.getName());}
+              if ((int) paramap.get("isFlag") == 1) {
+                  log.info("手动开始爬取---" + collectRule.getId() + "---" + collectRule.getName());
+                  articleSpider.run(collectRule);
+                  log.info("手动爬取结束---" + collectRule.getId() + "---" + collectRule.getName());
+              }
               collectRuleMapper.updateByCollectId(paramap);
               return true;
 
-          }catch (Exception e){
+          } catch (Exception e) {
 
               e.printStackTrace();
-              return  false;
+              return false;
 
           }
 
 
+    }
+
+    @Override
+    public boolean updateCollectStatusById(@Valid Long id, @Valid Long status) {
+        UpdateWrapper<CollectRule> wrapper = new UpdateWrapper<>();
+        wrapper.set("flag", status)
+                .eq("id", id);
+        return this.update(wrapper);
     }
 
 }

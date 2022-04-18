@@ -1,15 +1,17 @@
 package com.eicas.cms.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -114,14 +116,9 @@ public class Article extends BaseEntity implements Serializable {
     @TableField("is_major")
     private Boolean isMajor;
 
-
-
     @ApiModelProperty("是否公告")
     @TableField("is_notice")
     private Boolean isNotice;
-
-
-
 
     @ApiModelProperty("发布时间")
     @TableField(value = "publish_time", fill = FieldFill.INSERT)

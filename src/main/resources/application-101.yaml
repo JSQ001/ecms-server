@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     #url: jdbc:p6spy:mysql://localhost:3306/ecms_servera?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
-    url: jdbc:mysql://localhost:3306/ecms_servera?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    url: jdbc:mysql://172.20.58.101:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
    # url: jdbc:mysql://172.20.58.101:3306/ecms_server?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
     password: xxxxxx

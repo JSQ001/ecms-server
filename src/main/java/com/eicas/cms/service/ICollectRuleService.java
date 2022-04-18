@@ -1,11 +1,10 @@
 package com.eicas.cms.service;
 
-import com.eicas.cms.pojo.entity.CollectRule;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.eicas.cms.pojo.entity.CollectRule;
 import com.eicas.cms.pojo.vo.CollectRuleVO;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -41,11 +40,14 @@ public interface ICollectRuleService extends IService<CollectRule> {
 
     /**
      * 查询所有自动采集的数据
+     *
      * @param
      * @return
      */
     void selectCollectRuleInit();
 
     boolean updateByCollectId(Map flag);
+
+    boolean updateCollectStatusById(Long id, Long status);
 
 }

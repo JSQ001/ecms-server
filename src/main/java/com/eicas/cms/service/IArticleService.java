@@ -1,9 +1,11 @@
 package com.eicas.cms.service;
 
-import com.eicas.cms.pojo.entity.Article;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.eicas.cms.pojo.vo.*;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.eicas.cms.pojo.entity.Article;
+import com.eicas.cms.pojo.vo.ArticleAuditVO;
+import com.eicas.cms.pojo.vo.ArticleVO;
+import com.eicas.cms.pojo.vo.StatisticalResults;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
@@ -40,16 +42,19 @@ public interface IArticleService extends IService<Article> {
     */
     boolean logicalDeleteById(Long id);
     /**
-    * 批量删除文章
-    * @param ids
-    * @return
-    */
+     * 批量删除文章
+     *
+     * @param ids
+     * @return
+     */
     boolean batchDel(List<Long> ids);
+
     /**
-    * 爬虫数据保存
-    * @return
-    */
-    boolean saveCrawl(Article article,String sessionId);
+     * 爬虫数据保存
+     *
+     * @return
+     */
+    boolean saveArticle(Article article);
 
     /**
     * 查询文章统计信息
@@ -108,19 +113,12 @@ public interface IArticleService extends IService<Article> {
    Map statisticsByHitNumsCount(Map parmaMap);
 
 
-
-
     /**
      * 某栏目总浏览量前8
      *
      * */
     List<StatisticalResults> statisticsByHitNumsCountBefore(Map parmaMap);
 
-
-
     Page<Article> listArticlesInfor(ArticleVO articleVO);
-
-
-
 
 }

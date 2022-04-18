@@ -1,6 +1,6 @@
 package com.eicas.cms.component;
 
-import com.eicas.cms.crawling.Craw;
+import com.eicas.cms.crawler.ArticleSpider;
 import com.eicas.cms.pojo.entity.CollectRule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -23,7 +23,7 @@ public class ScheduleTask {
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Resource
-    private Craw craw;
+    private ArticleSpider articleSpider;
 
     /**
     *  更新定时任务队列
@@ -54,7 +54,7 @@ public class ScheduleTask {
 
         ScheduledFuture future = threadPoolTaskScheduler.schedule(()->{
             log.info("开始爬取---" + collectRule.getId() + "---" + collectRule.getName());
-            craw.run(collectRule,null);
+            articleSpider.run(collectRule);
             log.info("爬取结束---" + collectRule.getId() + "---" + collectRule.getName());
         }, new CronTrigger(trigger));
         log.info("已为" + collectRule.getId() + "" + collectRule.getName() +" 添加了定时采集任务,定时时间为：" +
@@ -66,9 +66,9 @@ public class ScheduleTask {
     /**
      *  删除定时任务
      * */
-    private void remove(CollectRule collectRule){
-        ScheduledFuture future = scheduleMap.get(collectRule.getId());
-        future.cancel(true);
-        scheduleMap.remove(future);
+    private void remove(CollectRule collectRule) {
+        ScheduledFuture scheduledFuture = scheduleMap.get(collectRule.getId());
+        scheduledFuture.cancel(true);
+        scheduleMap.remove(scheduledFuture);
     }
 }

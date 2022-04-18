@@ -1,32 +1,29 @@
 package com.eicas.cms.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-//import com.eicas.cms.component.MyWebsocketServer;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eicas.cms.exception.BusinessException;
+import com.eicas.cms.mapper.ArticleMapper;
 import com.eicas.cms.pojo.entity.Article;
 import com.eicas.cms.pojo.enumeration.ResultCode;
-import com.eicas.cms.pojo.vo.*;
-import com.eicas.cms.mapper.ArticleMapper;
+import com.eicas.cms.pojo.vo.ArticleAuditVO;
+import com.eicas.cms.pojo.vo.ArticleVO;
+import com.eicas.cms.pojo.vo.StatisticalResults;
 import com.eicas.cms.service.IArticleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.service.ICollectRuleService;
 import com.eicas.cms.service.IColumnService;
 import com.eicas.cms.utils.MinusOneDayUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,7 +79,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * 保存爬取的文章
      */
     @Override
-    public boolean saveCrawl(Article entity, String sessionId){
+    public boolean saveArticle(Article entity) {
         //去重入库
        /* QueryWrapper<Article> queryWrapper = new QueryWrapper<Article>()
                 .select("id")
@@ -220,6 +217,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public boolean batchDel(List<Long> ids) {
         return removeBatchByIds(ids);
     }
+
 
     /**
      *自动采集重复查询
