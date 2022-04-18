@@ -50,4 +50,6 @@ public interface ICollectRuleService extends IService<CollectRule> {
 
     boolean updateCollectStatusById(Long id, Long status);
 
+    boolean crawler(Long id);
+
 }

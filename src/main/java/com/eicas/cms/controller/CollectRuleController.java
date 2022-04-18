@@ -1,6 +1,7 @@
 package com.eicas.cms.controller;
 
 import com.eicas.cms.component.ScheduleTask;
+import com.eicas.cms.crawler.ArticleSpider;
 import com.eicas.cms.pojo.entity.Article;
 import com.eicas.cms.pojo.entity.CollectRule;
 import com.eicas.cms.pojo.vo.CollectRuleVO;
@@ -41,6 +42,7 @@ public class CollectRuleController {
     private ICollectRuleService iCollectRuleService;
     @Resource
     private ScheduleTask scheduleTask;
+
     @ApiOperation(value = "采集规则表分页查询", response = CollectRule.class)
     @GetMapping(value = "/list")
     public Page<CollectRule> listCollectRules(CollectRuleVO collectRuleVO) {
@@ -85,11 +87,7 @@ public class CollectRuleController {
     @ApiOperation(value = "开启手动采集")
     @PostMapping(value = "/crawler/{id}")
     public boolean collectrule(@PathVariable(value="id") Long id) {
-        Map<String,Object> ruleMap= new HashMap<>();
-        ruleMap.put("isFlag",1);
-        ruleMap.put("collectNumber",0);
-        ruleMap.put("id",id);
-         return  iCollectRuleService.updateByCollectId(ruleMap);
+        return iCollectRuleService.crawler(id);
     }
 
 

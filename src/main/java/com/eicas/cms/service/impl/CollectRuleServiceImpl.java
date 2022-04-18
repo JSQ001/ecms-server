@@ -42,7 +42,6 @@ public class CollectRuleServiceImpl extends ServiceImpl<CollectRuleMapper, Colle
     @Resource
     private ArticleSpider articleSpider;
 
-
     @Override
     public Page<CollectRule> listCollectRules(CollectRuleVO collectRuleVO) {
         return collectRuleMapper.listArticles(collectRuleVO, collectRuleVO.pageFactory());
@@ -103,6 +102,14 @@ public class CollectRuleServiceImpl extends ServiceImpl<CollectRuleMapper, Colle
         wrapper.set("is_flag", status)
                 .eq("id", id);
         return this.update(wrapper);
+    }
+
+    @Override
+    public boolean crawler(Long id) {
+        CollectRule rule = this.getById(id);
+        boolean status = this.updateCollectStatusById(id,1L);
+        articleSpider.run(rule);
+        return status;
     }
 
 }
