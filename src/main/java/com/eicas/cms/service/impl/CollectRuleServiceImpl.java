@@ -100,7 +100,7 @@ public class CollectRuleServiceImpl extends ServiceImpl<CollectRuleMapper, Colle
     @Override
     public boolean updateCollectStatusById(@Valid Long id, @Valid Long status) {
         UpdateWrapper<CollectRule> wrapper = new UpdateWrapper<>();
-        wrapper.set("flag", status)
+        wrapper.set("is_flag", status)
                 .eq("id", id);
         return this.update(wrapper);
     }
