@@ -83,7 +83,7 @@ public class CollectRuleController {
 
 
     @ApiOperation(value = "开启手动采集")
-    @PostMapping(value = "/collectrule/{id}")
+    @PostMapping(value = "/crawler/{id}")
     public boolean collectrule(@PathVariable(value="id") Long id) {
         Map<String,Object> ruleMap= new HashMap<>();
         ruleMap.put("isFlag",1);
