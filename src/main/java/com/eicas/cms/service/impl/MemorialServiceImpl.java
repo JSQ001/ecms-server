@@ -1,5 +1,6 @@
 package com.eicas.cms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -37,5 +38,6 @@ public class MemorialServiceImpl extends ServiceImpl<MemorialMapper, MemorialEnt
                         .like(StringUtils.hasText(param.getTitle()), MemorialEntity::getTitle, param.getTitle())
                         .eq(param.getState() != null, MemorialEntity::getState, param.getState())
                         .orderByDesc(MemorialEntity::getEventTime));
+
     }
 }
