@@ -1,5 +1,6 @@
 package com.eicas.cms.pojo.param;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,31 +10,24 @@ import java.time.LocalDateTime;
  * @since 2022/4/18
  */
 
-
 @Data
 public class MemorialQueryParam {
-    /**
-     * 事件时间-起始
-     */
+
+    @ApiModelProperty("事件开始时间")
     private LocalDateTime beginEventTime;
-    /**
-     * 事件时间-截止
-     */
+
+    @ApiModelProperty("事件结束时间")
     private LocalDateTime endEventTime;
-    /**
-     * 发布时间-起始
-     */
+
+    @ApiModelProperty("发布开始时间")
     private LocalDateTime beginPublishTime;
-    /**
-     * 发布时间-截止
-     */
+
+    @ApiModelProperty("发布截止时间")
     private LocalDateTime endPublishTime;
-    /**
-     * 状态：0-草稿,1-已发布
-     */
-    private Integer status;
-    /**
-     * 通知公告标题（模糊匹配）
-     */
+
+    @ApiModelProperty("状态：0-草稿,1-已发布")
+    private Integer state;
+
+    @ApiModelProperty("通知公告标题（模糊匹配）")
     private String title;
 }

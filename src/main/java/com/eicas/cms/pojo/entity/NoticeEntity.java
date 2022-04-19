@@ -1,10 +1,8 @@
 package com.eicas.cms.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -75,12 +73,14 @@ public class NoticeEntity implements Serializable {
     /**
      * 文章状态：0-草稿,1-发布
      */
-    private Integer status;
+    private Integer state;
 
     /**
      * 是否显示：0-不显示，1-显示
      */
-    private boolean show;
+
+    @TableField("is_hidden")
+    private boolean hidden;
 
     /**
      * 自定义顺序
@@ -96,5 +96,6 @@ public class NoticeEntity implements Serializable {
      * 逻辑删除
      */
     @TableLogic
+    @TableField("is_deleted")
     private boolean deleted;
 }

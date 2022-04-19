@@ -8,6 +8,7 @@ import com.eicas.cms.pojo.entity.MemorialEntity;
 import com.eicas.cms.pojo.param.MemorialQueryParam;
 import com.eicas.cms.service.IMemorialService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -27,10 +28,14 @@ public class MemorialServiceImpl extends ServiceImpl<MemorialMapper, MemorialEnt
     public Page<MemorialEntity> listMemorial(MemorialQueryParam param, Integer current, Integer size) {
         return memorialMapper.selectPage(Page.of(current, size),
                 Wrappers.<MemorialEntity>lambdaQuery()
-                        .between(MemorialEntity::getEventTime, param.getBeginEventTime(), param.getEndEventTime())
-                        .between(MemorialEntity::getPublishTime, param.getBeginPublishTime(), param.getEndPublishTime())
-                        .like(MemorialEntity::getTitle,param.getTitle())
-                        .eq(MemorialEntity::getStatus, param.getStatus())
+                        .ge(param.getBeginEventTime() != null, MemorialEntity::getEventTime, param.getBeginEventTime())
+                        .le(param.getEndEventTime() != null, MemorialEntity::getEventTime, param.getEndEventTime())
+
+                        .ge(param.getBeginPublishTime() != null, MemorialEntity::getPublishTime, param.getBeginPublishTime())
+                        .le(param.getEndPublishTime() != null, MemorialEntity::getPublishTime, param.getEndPublishTime())
+
+                        .like(StringUtils.hasText(param.getTitle()), MemorialEntity::getTitle, param.getTitle())
+                        .eq(param.getState() != null, MemorialEntity::getState, param.getState())
                         .orderByDesc(MemorialEntity::getEventTime));
     }
 }

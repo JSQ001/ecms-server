@@ -30,10 +30,12 @@ spring:
 mybatis-plus:
   configuration:
     　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
   mapper-locations: classpath:/com/eicas/cms/mapper/xml/*.xml
 
 logging:
-  level: debug
+  level:
+    com.eicas.cms: debug
 
 filePath:
 #  image: /home/eportal/ecms/img/

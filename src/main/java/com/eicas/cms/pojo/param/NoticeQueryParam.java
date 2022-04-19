@@ -40,10 +40,14 @@ public class NoticeQueryParam {
     /**
      * 通知公告状态：0-草稿,1-发布
      */
-    private Integer status;
+    private Integer state;
 
     /**
      * 是否显示：0-不显示，1-显示
      */
-    private boolean show;
+
+    private boolean hidden;
+
+
+
 }
