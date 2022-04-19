@@ -2,7 +2,11 @@ package com.eicas.cms.crawler;
 
 import cn.hutool.core.date.DateUtil;
 import com.eicas.cms.pojo.entity.Article;
+import com.eicas.cms.pojo.entity.CollectRule;
+import com.eicas.cms.pojo.entity.Column;
 import com.eicas.cms.service.IArticleService;
+import com.eicas.cms.service.ICollectRuleService;
+import com.eicas.cms.service.IColumnService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,11 @@ public class ArticlePipeline implements Pipeline {
 
     @Resource
     private IArticleService articleService;
+
+    @Resource
+    private IColumnService iColumnService;
+
+
 
     @Override
     public void process(ResultItems items, Task task) {
@@ -87,7 +96,9 @@ public class ArticlePipeline implements Pipeline {
          * 设置文章为待审核
          */
         article.setState(1);
-
+        Column column=iColumnService.getById(article.getColumnId());
+        article.setColumnName(column.getName());
+        article.setColumnCode(column.getColumnCode());
         articleService.saveArticle(article);
         log.debug(article.getContent());
     }

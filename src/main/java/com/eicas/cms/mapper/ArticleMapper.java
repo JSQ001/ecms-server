@@ -1,11 +1,14 @@
 package com.eicas.cms.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import com.eicas.cms.pojo.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.eicas.cms.pojo.vo.*;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import com.eicas.cms.pojo.vo.ArticleStatisticalResults;
+import com.eicas.cms.pojo.vo.ArticleVO;
+import com.eicas.cms.pojo.vo.StatisticalResults;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.mapping.FetchType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -395,6 +398,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "<if test='articleVO.state != null and articleVO.state!=\"\"'>" +
             "           and a.state = #{articleVO.state} " +
             "</if> " +
+            "<if test='articleVO.isRecommended != null and articleVO.isRecommended !=\"\"'>" +
+            "   and a.is_recommended= #{articleVO.isRecommended}" +
+            "</if>  " +
             "</where>" +
             "  ORDER BY a.sort_order, a.publish_time desc, a.updated_time desc" +
             "</script>")
