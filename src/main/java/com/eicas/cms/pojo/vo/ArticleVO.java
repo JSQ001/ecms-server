@@ -1,5 +1,6 @@
 package com.eicas.cms.pojo.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -57,6 +58,10 @@ public class ArticleVO extends BaseVO implements Serializable {
 
     @ApiModelProperty("月02")
     private String month;
+
+    @ApiModelProperty("是否推荐")
+    private Boolean isRecommended;
+
 
 
 
