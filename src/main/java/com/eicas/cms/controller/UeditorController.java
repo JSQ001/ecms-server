@@ -1,70 +1,90 @@
 package com.eicas.cms.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.eicas.cms.pojo.vo.UploadImageRrsult;
-import com.eicas.cms.utils.UploadFileUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lee.common.ueditor.ActionEnter;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSONException;
+import com.eicas.cms.pojo.vo.UploadFileResult;
+import com.eicas.common.ResultData;
+import com.eicas.utils.CommonUtils;
+import com.eicas.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 用于处理关于ueditor插件相关的请求
  *
- * @author Guoqing
- * @date 2017-11-29
+ * @author jsq
+ * @date 2022-04-23
  */
+
 @Slf4j
 @RestController
 @RequestMapping("/ueditor")
 public class UeditorController {
-    @Value("${filePath.loadPath}")
-    private String loadPath;
 
+    @Value("${ueditor.configPath}")
+    private String configPath;
 
-    @Value("${filePath.image}")
-    private  String imagePath;
+    @Value("${ecms.upload}")
+    private String uploadPath;
 
+    @Value("${ecms.filePrefix}")
+    private String filePrefix;
 
-    @GetMapping(value = "/exec")
+    @GetMapping(value = "/config")
     @ResponseBody
-    public String exec(HttpServletRequest request) throws UnsupportedEncodingException, JSONException {
-        String config = "'{\"imageActionName\":\"fileLoad\",\"imageFieldName\":\"file\",\"imageMaxSize\":2048000,\"imageAllowFiles\":[\".png\",\".jpg\",\".jpeg\",\".gif\",\".bmp\"],\"imageCompressEnable\":true,\"imageCompressBorder\":1600,\"imageInsertAlign\":\"none\",\"imageUrlPrefix\":\"\",\"localSavePathPrefix\":\"/file\",\"imagePathFormat\":\"/file/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\"catcherLocalDomain\":[\"127.0.0.1\",\"localhost\",\"img.baidu.com\"],\"catcherActionName\":\"catchimage\",\"catcherFieldName\":\"source\",\"catcherPathFormat\":\"/file/{yyyy}{mm}{dd}/{time}{rand:6}\",\"catcherUrlPrefix\":\"\",\"catcherMaxSize\":2048000,\"catcherAllowFiles\":[\".png\",\".jpg\",\".jpeg\",\".gif\",\".bmp\"],\"catchRemoteImageEnable\":false,\"fileActionName\":\"fileLoad\",\"fileFieldName\":\"file\",\"filePathFormat\":\"/file/{yyyy}{mm}{dd}/{time}{rand:6}\",\"fileUrlPrefix\":\"\",\"fileMaxSize\":51200000,\"fileAllowFiles\":[\".png\",\".jpg\",\".jpeg\",\".gif\",\".bmp\",\".flv\",\".swf\",\".mkv\",\".avi\",\".rm\",\".rmvb\",\".mpeg\",\".mpg\",\".ogg\",\".ogv\",\".mov\",\".wmv\",\".mp4\",\".webm\",\".mp3\",\".wav\",\".mid\",\".rar\",\".zip\",\".tar\",\".gz\",\".7z\",\".bz2\",\".cab\",\".iso\",\".doc\",\".docx\",\".xls\",\".xlsx\",\".ppt\",\".pptx\",\".pdf\",\".txt\",\".md\",\".xml\"]}'";
-
+    public String getConfig(HttpServletRequest request) throws UnsupportedEncodingException, JSONException {
+        String config = null;
+        if(StringUtils.hasText(configPath)){
+            try {
+                config = FileUtil.readString(configPath,"utf8");
+                JSONObject configJson =  new JSONObject(config);
+                config = configJson.toString();
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+        }else {
+            log.info(configPath + "不存在！");
+        }
         return config;
     }
 
-    @GetMapping(value = "/exec1")
+    @PostMapping(value = "/config")
     @ResponseBody
-    public Object exec1(HttpServletRequest request) throws UnsupportedEncodingException, JSONException {
+    public ResultData uploadFile(MultipartFile file){
+        String filename = file.getOriginalFilename();
+        String time = DateUtil.format(LocalDateTime.now(),"HH-MM-ss");
 
-        request.setCharacterEncoding("utf-8");
-        //String rootPath = request.getRealPath("/");
-        String rootPath = System.getProperty("user.dir") + "/src/main/";
-        log.info("**************************");
-        log.info(rootPath);
-        String configStr = new ActionEnter(request, rootPath).exec();
+        if(StringUtils.hasText(filename)){
+            int index = filename.lastIndexOf(".");
+            filename = filename.substring(0,index) + time + filename.substring(index);
+        }else {
+            filename = time;
+        }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map map = JSON.parseObject(new ActionEnter(request, rootPath).exec());
+        try {
+            String relativePath =  FileUtils.upload(file, uploadPath, filename);
+            UploadFileResult result =  new UploadFileResult();
+            String url = CommonUtils.trimUrl(filePrefix) + relativePath;
+            result.setUrl(url);
+            result.setTitle(filename);
+            result.setState("SUCCESS");
+            result.setOriginal(filename);
 
-        System.out.println("configStr=" + configStr);
-        return JSON.parse(new ActionEnter(request, rootPath).exec());
+            return ResultData.success(result,"上传成功！");
+        } catch (Exception e) {
+            return ResultData.failed("上传文件失败！");
+        }
     }
 
-    @PostMapping(value = "/exec")
-    @ResponseBody
-    public UploadImageRrsult exec(HttpServletRequest request, MultipartFile file) throws IOException, UnsupportedEncodingException, JSONException {
-        return UploadFileUtil.updateFile(request, file, loadPath,imagePath);
-    }
 }

@@ -1,11 +1,13 @@
 spring:
   application:
-    name: admin-server
+    name: ecms-sever
   profiles:
     active: 101
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 512MB
 
-#    active: pro
-#    active: test
 server:
   tomcat:
-    max-swallow-size: 102400
+    max-swallow-size: 512MB

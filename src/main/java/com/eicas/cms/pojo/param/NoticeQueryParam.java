@@ -1,6 +1,7 @@
 package com.eicas.cms.pojo.param;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -30,11 +31,13 @@ public class NoticeQueryParam {
     /**
      * 通知公告发布时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime beginPublishTime;
 
     /**
      * 通知公告发布时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endPublishTime;
 
     /**
@@ -45,9 +48,5 @@ public class NoticeQueryParam {
     /**
      * 是否显示：0-不显示，1-显示
      */
-
-    private boolean hidden;
-
-
-
+    private Boolean visible;
 }

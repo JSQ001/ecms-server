@@ -1,9 +1,8 @@
 package com.eicas.cms.service;
 
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.eicas.cms.pojo.entity.MemorialEntity;
+import com.eicas.cms.entity.MemorialEntity;
 import com.eicas.cms.pojo.param.MemorialQueryParam;
 
 /**
