@@ -1,6 +1,8 @@
-package com.eicas.crawler;
+package com.eicas.crawler.webmagic;
 
+import com.eicas.cms.service.IArticleService;
 import com.eicas.crawler.entity.CollectNodeEntity;
+import com.eicas.crawler.service.ICollectArticleService;
 import com.eicas.crawler.service.ICollectNodeService;
 import com.eicas.utils.FileUtils;
 import lombok.Getter;
@@ -19,7 +21,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import javax.annotation.Resource;
 import java.io.Closeable;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * PageProcessor的定制分为三个部分，分别是爬虫的配置、页面元素的抽取和链接的发现。
@@ -32,6 +36,11 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
 
     @Resource
     ICollectNodeService collectNodeService;
+
+    @Resource
+    IArticleService articleService;
+    @Resource
+    ICollectArticleService collectArticleService;
 
     @Value("${ecms.store-root-path}")
     private String storeRootPath;
@@ -49,9 +58,9 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
      */
     @Override
     public void process(Page page) {
-        Long catalogId = node.getCatalogId();
-        String source = node.getSource();
-        String collectUrl = node.getCollectUrl().trim();
+        Long columnId = node.getCatalogId();
+        String source = StringUtils.hasText(node.getSource()) ? node.getSource().trim() : null;
+        String collectUrl = StringUtils.hasText(node.getCollectUrl()) ? node.getCollectUrl().trim() : null;
         String pattern_list = node.getLinksRule();
         String pattern_title = node.getTitleRule();
         String pattern_content = node.getContentRule();
@@ -62,10 +71,7 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
         /*
          * 校验规则，列表、标题、内容规则不能为空
          */
-        if (node == null ||
-                !StringUtils.hasText(pattern_list) ||
-                !StringUtils.hasText(pattern_title) ||
-                !StringUtils.hasText(pattern_content)) {
+        if (node == null || !StringUtils.hasText(pattern_list) || !StringUtils.hasText(pattern_title) || !StringUtils.hasText(pattern_content)) {
             page.setSkip(true);
             return;
         }
@@ -73,59 +79,40 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
         if (page.getUrl().toString().equals(collectUrl)) {
             log.info("开始分析列表页");
             List<String> urls = page.getHtml().xpath(pattern_list).links().all();
+            urls = urls.stream()
+                    .distinct()
+                    .filter(i -> !collectArticleService.hasRepetition(i)).collect(Collectors.toList());
             page.addTargetRequests(urls);
-            log.info("如下地址将被采集：" + urls.toString());
+            log.info("下列页面将被采集：" + urls);
         } else {
             log.info("开始采集内容页");
-            /*
-             * 设置入库栏目ID
-             */
-            page.putField("catalogId", catalogId);
-
-            /*
-             * 设置采集来源
-             */
+            page.putField("columnId", columnId);
             page.putField("source", source);
+            page.putField("title", page.getHtml().xpath(pattern_title).toString());
+            page.putField("originUrl", page.getUrl().toString());
 
-            /*
-             * 采集文章标题
-             */
-            page.putField("title", page.getHtml().xpath(pattern_title).toString().trim());
-            /*
-             * 设置文章原文URL
-             */
-            page.putField("originUrl", page.getUrl().toString().trim());
-
-            /*
-             * 采集文章副标题
-             */
             if (StringUtils.hasText(pattern_subtitle)) {
-                page.putField("subTitle", page.getHtml().xpath(pattern_subtitle).toString().trim());
+                page.putField("subTitle", page.getHtml().xpath(pattern_subtitle).toString());
             } else {
                 page.putField("subTitle", "");
             }
-            /*
-             * 采集文章摘要
-             */
+
             if (StringUtils.hasText(pattern_essential)) {
-                page.putField("essential", page.getHtml().xpath(pattern_essential).toString().trim());
+                page.putField("essential", page.getHtml().xpath(pattern_essential).toString());
             } else {
                 page.putField("essential", "");
             }
-            /*
-             * 采集文章作者
-             */
+
             if (StringUtils.hasText(pattern_author)) {
-                page.putField("author", page.getHtml().xpath(pattern_author).toString().trim());
+                page.putField("author", page.getHtml().xpath(pattern_author).toString());
             } else {
-                page.putField("autor", "");
+                page.putField("author", "");
             }
 
-            /*
-             * 采集文章发布时间
-             */
             if (StringUtils.hasText(pattern_publish_time)) {
-                page.putField("publish_time", page.getHtml().xpath(pattern_publish_time).toString().trim());
+                page.putField("publish_time", page.getHtml().xpath(pattern_publish_time).toString());
+            } else {
+                page.putField("publish_time", LocalDateTime.now());
             }
 
             /*
@@ -133,12 +120,13 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
              * 2.下载正文图片，更新图片链接
              * 3.将第一张图片设置为文章封面图片
              */
-            StringBuffer content = new StringBuffer(page.getHtml().xpath(pattern_content).toString().trim());
+
+            StringBuffer content = new StringBuffer(page.getHtml().xpath(pattern_content).toString());
             String coverImageUrl = crabImages(page.getUrl().toString(), content);
             if (StringUtils.hasText(coverImageUrl)) {
-                page.putField("coverImageUrl", coverImageUrl.trim());
+                page.putField("coverImageUrl", coverImageUrl);
             }
-            page.putField("content", content.toString().trim());
+            page.putField("content", content.toString());
         }
     }
 
@@ -199,10 +187,7 @@ public class ArticlePageProcessor implements PageProcessor, Closeable {
         /*
          * 仅保留br,p,img,div标签
          */
-        String cleanStr = html.replaceAll("</?[^/?(br)|(p)|(img)|(div)][^><]*>", "").trim()
-                .replace("\r\n", "")
-                .replace("&nbsp", "");
-        return cleanStr;
+        return html.replaceAll("</?[^/?(br)|(p)|(img)|(div)][^><]*>", "").trim().replace("\r\n", "").replace("&nbsp", "");
     }
 
     @Override

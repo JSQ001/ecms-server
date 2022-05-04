@@ -1,11 +1,11 @@
 package com.eicas.crawler.scheduler;
 
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.config.CronTask;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,12 +14,8 @@ public class CronTaskRegistrar implements DisposableBean {
 
     private final Map<Runnable, ScheduledTask> scheduledTasks = new ConcurrentHashMap<>(16);
 
-    @Autowired
+    @Resource
     private TaskScheduler taskScheduler;
-
-    public TaskScheduler getScheduler() {
-        return this.taskScheduler;
-    }
 
     public void addCronTask(Runnable task, String cronExpression) {
         addCronTask(new CronTask(task, cronExpression));

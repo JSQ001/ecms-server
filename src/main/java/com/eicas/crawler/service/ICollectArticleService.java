@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <p>
  * 采集文章信息表 服务类
- * </p>
  *
  * @author osnudt
  * @since 2022-04-21
@@ -22,6 +20,13 @@ import java.util.List;
 public interface ICollectArticleService extends IService<CollectArticleEntity> {
 
     Page<CollectArticleEntity> listCollectArticle(CollectArticleParam param, Integer current, Integer size);
+
+    /**
+     * 查询是否存在原文网址为originUrl的文章信息
+     * @param originUrl 文章原文网址
+     * @return 有返回真，无则返回假
+     */
+    Boolean hasRepetition(String originUrl);
 
     List<ArticleStatisticCompileVO> statistic(LocalDateTime startTime, LocalDateTime endTime);
 

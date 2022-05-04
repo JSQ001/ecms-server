@@ -3,17 +3,12 @@ package com.eicas.crawler.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.entity.ArticleEntity;
-import com.eicas.cms.pojo.param.ArticleStaticsByCollect;
 import com.eicas.cms.pojo.param.CollectArticleParam;
-import com.eicas.cms.pojo.param.DayArticleStaticsResult;
 import com.eicas.cms.pojo.vo.ArticleStatisticCompileVO;
 import com.eicas.cms.service.IArticleService;
 import com.eicas.common.ResultData;
-import com.eicas.crawler.ArticleSpider;
 import com.eicas.crawler.entity.CollectArticleEntity;
-import com.eicas.crawler.entity.CollectNodeEntity;
 import com.eicas.crawler.service.ICollectArticleService;
-import com.eicas.crawler.service.ICollectNodeService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -2,7 +2,7 @@ spring:
   application:
     name: ecms-sever
   profiles:
-    active: 101
+    active: dev
   servlet:
     multipart:
       max-file-size: 512MB

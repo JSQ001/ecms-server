@@ -16,7 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICollectNodeService extends IService<CollectNodeEntity> {
 
-    ResultData<CollectNodeEntity> saveCollectNode(CollectNodeEntity entity);
+    CollectNodeEntity saveCollectNode(CollectNodeEntity entity);
+
+    CollectNodeEntity updateCollectNode(CollectNodeEntity nodeEntity);
+
+    Boolean deleteCollectNodeById(Long id);
 
     Page<CollectNodeEntity> listAll(CollectNodeParam collectNodeParam, Integer current, Integer size);
 }

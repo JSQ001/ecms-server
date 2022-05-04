@@ -21,6 +21,12 @@ mybatis-plus:
     　log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 ecms:
+  auth-server: localhost
+  authorization-url: http://localhost/oauth/authorize.do
+  token-url: http://localhost/oauth/token.do
+  signoff-uri: http://localhost/oauth/signoff.do
+  client-id: ecms
+  client-secret: 123456
   store-root-path: /Users/jsq/Desktop/test
   mapping-root-path: /file
   phantomJS: /usr/local/bin/phantomjs

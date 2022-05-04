@@ -1,4 +1,4 @@
-package com.eicas.crawler;
+package com.eicas.crawler.webmagic;
 
 import cn.hutool.core.date.DateUtil;
 import com.eicas.crawler.entity.CollectArticleEntity;
@@ -48,7 +48,7 @@ public class ArticlePipeline implements Pipeline {
         String publishTimeStr = items.get("publish_time");
         String source = items.get("source");
 
-        /**
+        /*
          * 作者处理，空则设置为系统采集
          */
         if (!StringUtils.hasText(author)) {
@@ -59,9 +59,12 @@ public class ArticlePipeline implements Pipeline {
          * 摘要处理，为空则摘取内容前200个字符
          */
         if (!StringUtils.hasText(essential)) {
-            String str = content.replaceAll("<([^>]*)>", "").trim();
+            String str = content.replaceAll("<([^>]*)>", "")
+                    .replace("\t", "")
+                    .replace("　", "")
+                    .replace("&nbsp;", "").trim();
             essential = str.length() >= 200 ? str.substring(200) : str;
-            log.debug(essential);
+//            log.debug(essential);
         }
         /*
          * 原文发布时间处理
@@ -89,6 +92,6 @@ public class ArticlePipeline implements Pipeline {
                 .setCollectTime(LocalDateTime.now());
 
         collectArticleService.save(collectArticle);
-        log.debug(collectArticle.getContent());
+        log.debug(collectArticle.getOriginUrl() + "页面采集成功");
     }
 }

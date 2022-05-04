@@ -1,17 +1,21 @@
 package com.eicas.security.config;
 
+import com.eicas.security.filter.TokenAuthenticationFilter;
 import com.eicas.security.handler.*;
 import com.eicas.security.service.impl.AuthUserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -80,7 +84,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
+        //auth.userDetailsService(userDetailsService());
+        auth.inMemoryAuthentication()
+                .passwordEncoder(passwordEncoder())
+                .withUser("jsq")
+                .password(passwordEncoder().encode("123456"))
+                .roles("jsq");
     }
 
     @Override
@@ -101,6 +110,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
          */
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint);
 
+
+        http.addFilterBefore(new TokenAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+
         /*
          * 登出处理
          */
@@ -108,7 +120,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         /*
          * 会话管理
          */
-        http.sessionManagement().maximumSessions(3).expiredSessionStrategy(sessionInformationExpiredStrategy);
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                //.maximumSessions(3).expiredSessionStrategy(sessionInformationExpiredStrategy);
         /*
          * 过滤请求
          */
@@ -129,5 +143,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
                 .anyRequest().authenticated();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 }

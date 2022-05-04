@@ -1,4 +1,4 @@
-package com.eicas.crawler.driver;
+package com.eicas.crawler.webmagic.driver;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;

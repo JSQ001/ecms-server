@@ -4,9 +4,9 @@ package com.eicas.crawler.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.pojo.param.CollectNodeParam;
 import com.eicas.common.ResultData;
-import com.eicas.crawler.ArticleSpider;
 import com.eicas.crawler.entity.CollectNodeEntity;
 import com.eicas.crawler.service.ICollectNodeService;
+import com.eicas.crawler.webmagic.ArticleSpider;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,8 +28,9 @@ public class CollectNodeController {
 
     @Resource
     ICollectNodeService collectNodeService;
+
     @Resource
-    ArticleSpider articleSpider;
+    private ArticleSpider spider;
     /**
      * 获取采集节点
      *
@@ -109,22 +110,17 @@ public class CollectNodeController {
     @PostMapping("/update")
     public ResultData<CollectNodeEntity> updateCollectNode(@Valid @RequestBody CollectNodeEntity entity) {
         if (!collectNodeService.updateById(entity)) {
-            return ResultData.failed("更新采集节点信息失败");
+            return ResultData.failed("更新采集节点失败");
         }
-        return ResultData.success(entity);
+        return ResultData.success(entity, "更新采集节点成功");
     }
 
     /**
      * 手动采集
-     *
-     * @param id 采集规则id
-     *
      */
     @PostMapping("/manual/{id}")
-    public ResultData<Boolean> manualCollect(@PathVariable(value = "id")Long id) {
-        CollectNodeEntity nodeEntity = collectNodeService.getById(id);
-        collectNodeService.updateById(new CollectNodeEntity().setId(id).setState(1));
-        articleSpider.run(nodeEntity);
-        return ResultData.success(true);
+    public ResultData manualCollect(@PathVariable(value = "id") Long id) {
+        spider.run(id);
+        return ResultData.success("启动采集程序");
     }
 }

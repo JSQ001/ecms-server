@@ -2,8 +2,6 @@ package com.eicas.crawler.scheduler;
 
 import com.eicas.utils.SpringContextUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 

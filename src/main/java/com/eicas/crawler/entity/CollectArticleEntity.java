@@ -1,17 +1,14 @@
 package com.eicas.crawler.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 采集文章信息表
@@ -61,7 +58,6 @@ public class CollectArticleEntity implements Serializable {
     @ApiModelProperty(value = "原文发布时间")
     private LocalDateTime publishTime;
 
-
     @ApiModelProperty(value = "采集来源")
     private String source;
 
@@ -69,13 +65,11 @@ public class CollectArticleEntity implements Serializable {
     private LocalDateTime collectTime;
 
     @ApiModelProperty(value = "是否已入库")
+    @TableField("is_received")
     private Boolean received;
 
     @ApiModelProperty(value = "逻辑删除")
+    @TableLogic
+    @TableField("is_deleted")
     private Boolean deleted;
-
-    @TableField(exist = false)
-    private String catalogName;
-
-
 }

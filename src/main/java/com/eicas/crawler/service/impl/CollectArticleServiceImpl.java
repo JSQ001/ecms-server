@@ -1,6 +1,7 @@
 package com.eicas.crawler.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eicas.cms.entity.ArticleEntity;
 import com.eicas.cms.pojo.param.ArticleStaticsByCollect;
@@ -21,9 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 采集文章信息表 服务实现类
- * </p>
  *
  * @author osnudt
  * @since 2022-04-21
@@ -39,6 +38,13 @@ public class CollectArticleServiceImpl extends ServiceImpl<CollectArticleMapper,
     @Override
     public Page<CollectArticleEntity> listCollectArticle(CollectArticleParam param, Integer current, Integer size) {
         return collectArticleMapper.listCollectArticle(param, Page.of(current,size));
+    }
+
+    @Override
+    public Boolean hasRepetition(String originUrl) {
+        return !collectArticleMapper.selectList(
+                Wrappers.<CollectArticleEntity>lambdaQuery()
+                        .eq(CollectArticleEntity::getOriginUrl, originUrl)).isEmpty();
     }
 
     @Override
